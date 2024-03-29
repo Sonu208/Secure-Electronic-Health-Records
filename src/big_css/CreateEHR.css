@@ -1,0 +1,13 @@
+/* src/CSS/CreateEhr.css */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Add waves pattern to the background */
+body {
+  background-color: #1a202c; /* Dark background color */
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}

@@ -1,0 +1,83 @@
+/* PatientRegistration.css */
+
+/* Main container */
+.patientRegistration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+  height: 600px;
+}
+
+/* Heading */
+.patientRegistration h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* Form elements */
+.patientRegistration label {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.patientRegistration input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background-color: #1e1e1e; /* Darker background color */
+  color: #ffffff; /* Text color */
+}
+
+.patientRegistration button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5; /* Teal color */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.patientRegistration button:hover {
+  background-color: #393e46; /* Darker teal color on hover */
+  transform: scale(1.05);
+}
+
+.patientRegistration button:active {
+  transform: scale(0.95);
+}
+
+/* Loading text */
+.patientRegistration p {
+  font-size: 18px;
+  margin-top: 16px;
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .patientRegistration {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .patientRegistration input {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .patientRegistration button {
+    background-color: #00adb5; /* Teal color */
+  }
+
+  .patientRegistration button:hover {
+    background-color: #393e46; /* Darker teal color on hover */
+  }
+}

@@ -1,0 +1,63 @@
+/* DoctorRegistration.css */
+
+/* Main container */
+.DoctorRegistrationForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+}
+
+/* Form elements */
+.DoctorRegistrationForm label {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.DoctorRegistrationForm input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background-color: #1e1e1e; /* Darker background color */
+  color: #ffffff; /* Text color */
+}
+
+/* Submit button */
+.DoctorRegistrationForm button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5; /* Teal color */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.DoctorRegistrationForm button:hover {
+  background-color: #393e46; /* Darker teal color on hover */
+  transform: scale(1.05);
+}
+
+.DoctorRegistrationForm button:active {
+  transform: scale(0.95);
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .DoctorRegistrationForm {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .DoctorRegistrationForm input {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff;
+  }
+}

@@ -1,0 +1,50 @@
+/* RecordViewer.css */
+
+/* Main container */
+.contractinteraction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+  height: 600px;
+}
+
+/* Heading */
+.contractinteraction h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* Sub-heading */
+.contractinteraction h2 {
+  font-size: 20px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+/* List items */
+.contractinteraction ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contractinteraction li {
+  margin-bottom: 24px;
+}
+
+.contractinteraction strong {
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .contractinteraction {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+}

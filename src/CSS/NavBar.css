@@ -1,0 +1,48 @@
+/* NavBar.css */
+
+.NavP {
+  background-color: #121212; /* Dark background color */
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.navbar button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar button:not(:last-child) {
+  margin-right: 20px;
+}
+
+.navbar button:hover {
+  background-color: #393e46; /* Darker background color on hover */
+  transform: scale(1.05);
+}
+
+.navbar button:active {
+  transform: scale(0.95);
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .NavP {
+    background-color: #1e1e1e; /* Darker background color */
+  }
+
+  .navbar button:hover {
+    background-color: #393e46; /* Darker background color on hover */
+  }
+}

@@ -1,0 +1,86 @@
+/* PatientWritePermissionPage.css */
+
+/* Main container */
+.patientwritepermission {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+  height: 600px;
+}
+
+/* Heading */
+.patientwritepermission h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* Label and Input */
+.patientwritepermission label {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.patientwritepermission input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background-color: #1e1e1e; /* Darker background color */
+  color: #ffffff; /* Text color */
+}
+
+/* Permission buttons */
+.patientwritepermission button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5; /* Teal color */
+  cursor: pointer;
+  margin-top: 12px;
+  margin-right: 20px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.patientwritepermission button:hover {
+  background-color: #393e46; /* Darker teal color on hover */
+  transform: scale(1.05);
+}
+
+.patientwritepermission button:active {
+  transform: scale(0.95);
+}
+
+/* Permission status */
+.patientwritepermission p {
+  font-size: 18px;
+  margin-top: 16px;
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .patientwritepermission {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .patientwritepermission input {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .patientwritepermission button {
+    background-color: #00adb5; /* Teal color */
+  }
+
+  .patientwritepermission button:hover {
+    background-color: #393e46; /* Darker teal color on hover */
+  }
+}

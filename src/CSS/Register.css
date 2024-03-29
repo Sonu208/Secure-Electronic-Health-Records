@@ -1,0 +1,75 @@
+.register {
+  background: linear-gradient(to bottom, black, #333);
+  color: white;
+  margin: 0;
+  height: 100vh;
+}
+.h2-reg {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff5252;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.regchild {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-reg,
+.label-reg {
+  padding: 5px 10px;
+  margin-top: 120px;
+}
+.select-reg {
+  border-radius: 10px;
+  color: black;
+  background-color: #ff5252;
+  box-shadow: 5px 5px 0px #000;
+  border: 2px solid #000;
+  border-radius: 10px;
+  font-size: large;
+}
+.label-reg {
+  font-size: 40px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #ff5252;
+}
+
+.button-container-reg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.but-reg {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #ff5252;
+  border: 2px solid #000;
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px #000;
+  transition: all 0.3s ease;
+  margin: 20px;
+}
+.but-reg:hover {
+  background-color: #fff;
+  color: #ff5252;
+  border: 2px solid #ff5252;
+  box-shadow: 5px 5px 0px #ff5252;
+}
+
+.but-reg:active {
+  background-color: #fcf414;
+  box-shadow: none;
+  transform: translateY(4px);
+}

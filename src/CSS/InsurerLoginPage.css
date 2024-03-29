@@ -1,0 +1,66 @@
+.InsurerLoginPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212;
+  color: #ffffff;
+  height: 600px;
+}
+
+.InsurerLoginPage h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.InsurerLoginPage input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.InsurerLoginPage button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.InsurerLoginPage button:hover {
+  background-color: #393e46;
+  transform: scale(1.05);
+}
+
+.InsurerLoginPage button:active {
+  transform: scale(0.95);
+}
+
+@media (prefers-color-scheme: dark) {
+  .InsurerLoginPage {
+    background-color: #1e1e1e;
+    color: #ffffff;
+  }
+
+  .InsurerLoginPage input {
+    background-color: #1e1e1e;
+    color: #ffffff;
+  }
+
+  .InsurerLoginPage button {
+    background-color: #00adb5;
+  }
+
+  .InsurerLoginPage button:hover {
+    background-color: #393e46;
+  }
+}

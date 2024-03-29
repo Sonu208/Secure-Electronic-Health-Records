@@ -1,0 +1,64 @@
+/* PatientDashBoard.css */
+
+/* Main container */
+.patientdashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+  height: 600px;
+}
+
+/* Heading */
+.patientdashboard h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* Paragraph */
+.patientdashboard p {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+/* Buttons */
+.patientdashboard button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5; /* Teal color */
+  cursor: pointer;
+  margin: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.patientdashboard button:hover {
+  background-color: #393e46; /* Darker teal color on hover */
+  transform: scale(1.05);
+}
+
+.patientdashboard button:active {
+  transform: scale(0.95);
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .patientdashboard {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .patientdashboard button {
+    background-color: #00adb5; /* Teal color */
+  }
+
+  .patientdashboard button:hover {
+    background-color: #393e46; /* Darker teal color on hover */
+  }
+}
