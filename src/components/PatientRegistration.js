@@ -15,10 +15,10 @@ const PatientRegistration = () => {
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [gender, setGender] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const init = async () => {
@@ -96,9 +96,16 @@ const PatientRegistration = () => {
         return;
       }
 
-      const datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+      // Check if dateOfBirth is in the format dd/mm/yyyy
+      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
       if (!datePattern.test(dateOfBirth)) {
         alert("Please enter Date of Birth in the format dd/mm/yyyy");
+        return;
+      }
+
+      // Password validation: minimum length
+      if (password.length < 8) {
+        alert("Password must be at least 8 characters long.");
         return;
       }
 
@@ -114,8 +121,6 @@ const PatientRegistration = () => {
         return;
       }
 
-      await contract.methods.registerPatient;
-
       await contract.methods
         .registerPatient(
           name,
@@ -123,7 +128,8 @@ const PatientRegistration = () => {
           homeAddress,
           phoneNumber,
           walletAddress,
-          gender
+          gender,
+          password
         )
         .send({ from: walletAddress });
       setName("");
@@ -132,6 +138,7 @@ const PatientRegistration = () => {
       setPhoneNumber("");
       setWalletAddress("");
       setGender("");
+      setPassword("");
 
       alert("Patient registered successfully!");
       navigate("/patient_login");
@@ -260,6 +267,25 @@ const PatientRegistration = () => {
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
+          </div>
+
+          <div className="mb-4">
+            <label
+              className="block font-bold text-white"
+              htmlFor="password"
+            >
+              Password:
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
           <div className="md:col-span-2 flex justify-center mt-6">

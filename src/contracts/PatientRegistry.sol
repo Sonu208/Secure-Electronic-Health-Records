@@ -9,6 +9,7 @@ contract PatientRegistry {
         string phoneNumber;
         address walletAddress;
         string gender;
+        string password;
     }
 
     mapping(address => bool) public isPatient;
@@ -22,7 +23,9 @@ contract PatientRegistry {
         string memory _homeAddress,
         string memory _phoneNumber,
         address _walletAddress,
-        string memory _gender
+        string memory _gender,
+        string memory _password
+
     ) external {
         require(
             patients[_walletAddress].walletAddress != _walletAddress,
@@ -35,7 +38,9 @@ contract PatientRegistry {
             homeAddress: _homeAddress,
             phoneNumber: _phoneNumber,
             walletAddress: _walletAddress,
-            gender: _gender
+            gender: _gender,
+            password: _password // Store password in the struct
+
         });
 
         patients[_walletAddress] = newPatient;
@@ -48,6 +53,10 @@ contract PatientRegistry {
     ) external view returns (bool) {
         return isPatient[_walletAddress];
     }
+// Add a function to validate patient's password
+function validatePatientPassword(address _walletAddress, string memory _password) external view returns (bool) {
+    return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(patients[_walletAddress].password));
+}
 
     function givepermissioncreate(address _walletAddress) public {
         canCreate[msg.sender][_walletAddress] = true;

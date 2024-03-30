@@ -67,7 +67,11 @@ const DoctorRegistrationForm = () => {
          alert("Please enter Date of Birth in the format dd/mm/yyyy");
          return;
        }
-
+ // Password validation: minimum length
+ if (password.length < 8) {
+  alert("Password must be at least 8 characters long.");
+  return;
+}
       const isRegDoc = await contract.methods
         .isRegisteredDoctor(doctorAddress)
         .call();

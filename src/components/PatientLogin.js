@@ -9,6 +9,7 @@ const PatientLogin = () => {
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
   const [walletAddress, setWalletAddress] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -40,23 +41,38 @@ const PatientLogin = () => {
 
   const handleLogin = async () => {
     try {
-      setIsLoading(true);
-      const result = await contract.methods
-        .isRegisteredPatient(walletAddress)
-        .call();
-      if (!result) {
-        alert("Patient not registered");
-        return;
-      }
-      console.log(walletAddress);
-      setIsLoggedIn(result);
-      navigate("/patient/" + walletAddress);
+        setIsLoading(true);
+
+        // Validate patient's password
+        const isValidPassword = await contract.methods
+            .validatePatientPassword(walletAddress, password)
+            .call();
+
+        if (!isValidPassword) {
+            alert("Incorrect password");
+            return;
+        }
+
+        // Check if patient is registered
+        const isRegistered = await contract.methods
+            .isRegisteredPatient(walletAddress)
+            .call();
+
+        if (!isRegistered) {
+            alert("Patient not registered");
+            return;
+        }
+
+        // If password is valid and patient is registered, proceed with login
+        setIsLoggedIn(true);
+        navigate("/patient/" + walletAddress);
     } catch (error) {
-      console.error("Error checking registration:", error);
+        console.error("Error checking registration:", error);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="bg-gradient-to-b from-black to-gray-800 min-h-screen flex flex-col justify-center items-center p-4 font-mono text-white">
@@ -68,6 +84,17 @@ const PatientLogin = () => {
             type="text"
             value={walletAddress}
             onChange={(e) => setWalletAddress(e.target.value)}
+            className="p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
+            required
+          />
+        </div>
+
+        <div className="flex flex-col w-full mb-4">
+          <label className="mb-2 font-bold">Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
             required
           />
