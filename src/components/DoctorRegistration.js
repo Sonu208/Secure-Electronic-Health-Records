@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Web3 from "web3";
 import DoctorRegistration from "../build/contracts/DoctorRegistration.json";
+import { useNavigate } from "react-router-dom";
 import "../CSS/DoctorRegistration.css";
 
 const DoctorRegistrationForm = () => {
@@ -14,48 +15,15 @@ const DoctorRegistrationForm = () => {
   const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
   const [workExperience, setWorkExperience] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [specializationError, setSpecializationError] = useState("");
+  const [departmentError, setDepartmentError] = useState("");
+  const [designationError, setDesignationError] = useState("");
+  const [password, setPassword] = useState(""); // Define password state variable
 
-  const hospitals = [
-    "Hinduja",
-    "Fortis",
-    "Sushrusha",
-    "Noble",
-    "Apolo",
-    "Global",
-    "Jaslok",
-    "Nanavati",
-    "Raheja",
-    "Kokilaben"
-  ];
-
-  const genders = ["Male", "Female", "Others"];
-
-  const specializations = [
-    "General Medical",
-    "Cardiology",
-    "Surgeon",
-    "Gastroenterology",
-    "Respiratory",
-    "Oncology",
-    "Neurology",
-    "Rheumatology"
-  ];
-
-  const departments = [
-    "General Medical",
-    "Cardiology",
-    "Surgeon",
-    "Gastroenterology",
-    "Respiratory",
-    "Oncology",
-    "Neurology",
-    "Rheumatology"
-  ];
-
-  const designations = ["HOD", "Senior Doctor", "Consultant", "Physician", "Specialist"];
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
-
     if (
       !doctorAddress ||
       !doctorName ||
@@ -66,7 +34,8 @@ const DoctorRegistrationForm = () => {
       !specialization ||
       !department ||
       !designation ||
-      !workExperience
+      !workExperience ||
+      !password
     ) {
       alert(
         "You have missing input fields. Please fill in all the required fields."
@@ -81,6 +50,7 @@ const DoctorRegistrationForm = () => {
       return;
     }
 
+
     try {
       const web3 = new Web3(window.ethereum);
 
@@ -91,12 +61,12 @@ const DoctorRegistrationForm = () => {
         DoctorRegistration.networks[networkId].address
       );
 
-      // Check if dateOfBirth is in the format dd/mm/yyyy
-      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-      if (!datePattern.test(dateOfBirth)) {
-        alert("Please enter Date of Birth in the format dd/mm/yyyy");
-        return;
-      }
+       // Check if dateOfBirth is in the format dd/mm/yyyy
+       const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+       if (!datePattern.test(dateOfBirth)) {
+         alert("Please enter Date of Birth in the format dd/mm/yyyy");
+         return;
+       }
 
       const isRegDoc = await contract.methods
         .isRegisteredDoctor(doctorAddress)
@@ -118,15 +88,45 @@ const DoctorRegistrationForm = () => {
           specialization,
           department,
           designation,
-          workExperience
+          workExperience,
+          password // Include password in the function call
         )
         .send({ from: doctorAddress });
 
       alert("Doctor registered successfully!");
+      navigate("/");
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while registering the doctor.");
     }
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    const inputPhoneNumber = e.target.value;
+    const phoneRegex = /^\d{10}$/;
+    if (phoneRegex.test(inputPhoneNumber)) {
+      setPhoneNumber(inputPhoneNumber);
+    } else {
+      alert("Please enter a 10-digit phone number.");
+    }
+  };
+
+  // Function to handle changes in Specialization dropdown
+  const handleSpecializationChange = (e) => {
+    const value = e.target.value;
+    setSpecialization(value);
+  };
+
+  // Function to handle changes in Department dropdown
+  const handleDepartmentChange = (e) => {
+    const value = e.target.value;
+    setDepartment(value);
+  };
+
+  // Function to handle changes in Designation dropdown
+  const handleDesignationChange = (e) => {
+    const value = e.target.value;
+    setDesignation(value);
   };
 
   return (
@@ -137,8 +137,11 @@ const DoctorRegistrationForm = () => {
         </h2>
         <form className="bg-gray-900 p-6 rounded-lg shadow-lg grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="doctorAddress">
-              Doctor Address:
+            <label
+              className="block font-bold text-white"
+              htmlFor="doctorAddress"
+            >
+              Doctor's Wallet Public Address:
             </label>
             <input
               id="doctorAddress"
@@ -146,7 +149,7 @@ const DoctorRegistrationForm = () => {
               type="text"
               required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
-              placeholder="Doctor Address"
+              placeholder="Public Address"
               value={doctorAddress}
               onChange={(e) => setDoctorAddress(e.target.value)}
             />
@@ -161,39 +164,41 @@ const DoctorRegistrationForm = () => {
               type="text"
               required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
-              placeholder="Doctor Name"
+              placeholder="Doctor's Full Name"
               value={doctorName}
               onChange={(e) => setDoctorName(e.target.value)}
             />
           </div>
           <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="hospitalName">
+            <label
+              className="block font-bold text-white"
+              htmlFor="hospitalName"
+            >
               Hospital Name:
             </label>
-            <select
+            <input
               id="hospitalName"
               name="hospitalName"
+              type="text"
+              required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
+              placeholder="Hospital Name"
               value={hospitalName}
               onChange={(e) => setHospitalName(e.target.value)}
-            >
-              <option value="">Select Hospital</option>
-              {hospitals.map((hospital, index) => (
-                <option key={index} value={hospital}>{hospital}</option>
-              ))}
-            </select>
+            />
           </div>
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="dateOfBirth">
               Date of Birth:
             </label>
             <input
-              type="date"
               id="dateOfBirth"
               name="dateOfBirth"
+              type="date" // Use type="date" for date picker
+              required
+              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
               value={dateOfBirth}
               onChange={(e) => setDateOfBirth(e.target.value)}
-              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
             />
           </div>
           <div className="mb-4">
@@ -203,14 +208,15 @@ const DoctorRegistrationForm = () => {
             <select
               id="gender"
               name="gender"
-              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
+              required
               value={gender}
               onChange={(e) => setGender(e.target.value)}
+              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
             >
               <option value="">Select Gender</option>
-              {genders.map((gender, index) => (
-                <option key={index} value={gender}>{gender}</option>
-              ))}
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <div className="mb-4">
@@ -226,8 +232,10 @@ const DoctorRegistrationForm = () => {
               placeholder="Phone Number"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              onBlur={handlePhoneNumberChange}
             />
           </div>
+          {/* Specialization dropdown */}
           <div className="mb-4">
             <label
               className="block font-bold text-white"
@@ -238,49 +246,106 @@ const DoctorRegistrationForm = () => {
             <select
               id="specialization"
               name="specialization"
+              required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
               value={specialization}
-              onChange={(e) => setSpecialization(e.target.value)}
+              onChange={handleSpecializationChange}
             >
               <option value="">Select Specialization</option>
-              {specializations.map((spec, index) => (
-                <option key={index} value={spec}>{spec}</option>
-              ))}
+              <option value="Cardiology">Cardiology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Orthopedics">Orthopedics</option>
+              <option value="Oncology">Oncology</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Gynecology">Gynecology</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Ophthalmology">Ophthalmology</option>
+              <option value="Psychiatry">Psychiatry</option>
+              <option value="Radiology">Radiology</option>
+              <option value="Other">Other</option>
             </select>
+            {specialization === "Other" && (
+              <input
+                type="text"
+                placeholder="Enter Other Specialization"
+                className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
+                value={specializationError}
+                onChange={(e) => setSpecializationError(e.target.value)}
+              />
+            )}
           </div>
+
+          {/* Department dropdown */}
           <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="department">
+            <label
+              className="block font-bold text-white"
+              htmlFor="department"
+            >
               Department:
             </label>
             <select
               id="department"
               name="department"
+              required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
               value={department}
-              onChange={(e) => setDepartment(e.target.value)}
+              onChange={handleDepartmentChange}
             >
               <option value="">Select Department</option>
-              {departments.map((dept, index) => (
-                <option key={index} value={dept}>{dept}</option>
-              ))}
+              <option value="Emergency Department (ER)">Emergency Department (ER)</option>
+              <option value="Intensive Care Unit (ICU)">Intensive Care Unit (ICU)</option>
+              <option value="Surgery Department">Surgery Department</option>
+              <option value="Laboratory Services">Laboratory Services</option>
+              <option value="Pharmacy">Pharmacy</option>
+              <option value="Radiology Department">Radiology Department</option>
+              <option value="Obstetrics and Gynecology Department">Obstetrics and Gynecology Department</option>
+              <option value="Pediatrics Department">Pediatrics Department</option>
+              <option value="Orthopedics Department">Orthopedics Department</option>
+              <option value="Cardiology Department">Cardiology Department</option>
+              <option value="Other">Other</option>
             </select>
+            {department === "Other" && (
+              <input
+                type="text"
+                placeholder="Enter Other Department"
+                className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
+                value={departmentError}
+                onChange={(e) => setDepartmentError(e.target.value)}
+              />
+            )}
           </div>
+
+          {/* Designation dropdown */}
           <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="designation">
+            <label
+              className="block font-bold text-white"
+              htmlFor="designation"
+            >
               Designation:
             </label>
             <select
               id="designation"
               name="designation"
+              required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
               value={designation}
-              onChange={(e) => setDesignation(e.target.value)}
+              onChange={handleDesignationChange}
             >
               <option value="">Select Designation</option>
-              {designations.map((desig, index) => (
-                <option key={index} value={desig}>{desig}</option>
-              ))}
+              <option value="Doctor">Doctor</option>
+              <option value="Surgeon">Surgeon</option>
+              <option value="Nurse">Nurse</option>
+              <option value="Other">Other</option>
             </select>
+            {designation === "Other" && (
+              <input
+                type="text"
+                placeholder="Enter Other Designation"
+                className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
+                value={designationError}
+                onChange={(e) => setDesignationError(e.target.value)}
+              />
+            )}
           </div>
           <div className="mb-4">
             <label
@@ -292,12 +357,31 @@ const DoctorRegistrationForm = () => {
             <input
               id="workExperience"
               name="workExperience"
-              type="text"
+              type="number"
               required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
-              placeholder="Work Experience"
+              placeholder="Years"
+              min="0"
               value={workExperience}
               onChange={(e) => setWorkExperience(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block font-bold text-white"
+              htmlFor="password"
+            >
+              Password:
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
         </form>

@@ -1,9 +1,8 @@
-// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
 contract DoctorRegistration {
     struct Doctor {
-        address doctorAddress; // Add the Ethereum address to the struct
+        address doctorAddress;
         string doctorName;
         string hospitalName;
         string dateOfBirth;
@@ -13,6 +12,7 @@ contract DoctorRegistration {
         string department;
         string designation;
         string workExperience;
+        string password;
     }
 
     mapping(address => Doctor) private doctors;
@@ -30,12 +30,10 @@ contract DoctorRegistration {
         string memory _specialization,
         string memory _department,
         string memory _designation,
-        string memory _workExperience
+        string memory _workExperience,
+        string memory _password
     ) external {
-        require(
-            !isDoctorRegistered[_doctorAddress],
-            "Doctor already registered"
-        );
+        require(!isDoctorRegistered[_doctorAddress], "Doctor already registered");
 
         Doctor memory newDoctor = Doctor({
             doctorAddress: _doctorAddress,
@@ -47,7 +45,8 @@ contract DoctorRegistration {
             specialization: _specialization,
             department: _department,
             designation: _designation,
-            workExperience: _workExperience
+            workExperience: _workExperience,
+            password: _password
         });
 
         doctors[_doctorAddress] = newDoctor;
@@ -56,15 +55,15 @@ contract DoctorRegistration {
         emit DoctorRegistered(_doctorAddress, _doctorName);
     }
 
-    function getDoctorDetails(
-        address _doctorAddress
-    ) external view returns (Doctor memory) {
+    function validateDoctorPassword(address _doctorAddress, string memory _password) external view returns (bool) {
+        return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(doctors[_doctorAddress].password));
+    }
+
+    function getDoctorDetails(address _doctorAddress) external view returns (Doctor memory) {
         return doctors[_doctorAddress];
     }
 
-    function isRegisteredDoctor(
-        address _doctorAddress
-    ) external view returns (bool) {
+    function isRegisteredDoctor(address _doctorAddress) external view returns (bool) {
         return isDoctorRegistered[_doctorAddress];
     }
 }

@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import Web3 from "web3";
 import DoctorRegistration from "../build/contracts/DoctorRegistration.json";
 import { useNavigate } from "react-router-dom";
-import "../CSS/DoctorLoginPage.css"; // Import the same CSS file used for InsurerLoginPage
+import "../CSS/DoctorLoginPage.css";
 
 const DoctorLoginPage = () => {
   const navigate = useNavigate();
   const [doctorAddress, setDoctorAddress] = useState("");
+  const [password, setPassword] = useState(""); // State for password
   const [isRegistered, setIsRegistered] = useState(false);
   const [doctorDetails, setDoctorDetails] = useState(null);
 
@@ -25,11 +26,20 @@ const DoctorLoginPage = () => {
       setIsRegistered(isRegisteredResult);
 
       if (isRegisteredResult) {
-        const doctor = await contract.methods
-          .getDoctorDetails(doctorAddress)
+        // Check password here
+        const isValidPassword = await contract.methods
+          .validateDoctorPassword(doctorAddress, password)
           .call();
-        setDoctorDetails(doctor);
-        navigate("/doctor/" + doctorAddress);
+
+        if (isValidPassword) {
+          const doctor = await contract.methods
+            .getDoctorDetails(doctorAddress)
+            .call();
+          setDoctorDetails(doctor);
+          navigate("/doctor/" + doctorAddress);
+        } else {
+          alert("Incorrect password");
+        }
       } else {
         alert("Doctor not registered");
       }
@@ -49,6 +59,17 @@ const DoctorLoginPage = () => {
             type="text"
             value={doctorAddress}
             onChange={(e) => setDoctorAddress(e.target.value)}
+            className="p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
+            required
+          />
+        </div>
+        {/* Password input field */}
+        <div className="flex flex-col w-full mb-4">
+          <label className="mb-2 font-bold">Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
             required
           />
