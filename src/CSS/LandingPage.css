@@ -1,0 +1,54 @@
+/* LandingPage.css */
+
+.landingP {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.custom-button {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5; /* Teal color for buttons */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.custom-button:hover {
+  background-color: #393e46; /* Darker teal color on hover */
+  transform: scale(1.05);
+}
+
+.custom-button:active {
+  transform: scale(0.95);
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .landingP {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .custom-button {
+    background-color: #00adb5; /* Teal color for buttons */
+  }
+
+  .custom-button:hover {
+    background-color: #393e46; /* Darker teal color on hover */
+  }
+}

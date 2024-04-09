@@ -1,0 +1,93 @@
+/* CreateEhr.css */
+
+/* Main container */
+.createehr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+  height: 750px;
+}
+
+/* Heading */
+.createehr h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* Form elements */
+.createehr form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+
+.createehr label {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.createehr input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background-color: #1e1e1e; /* Darker background color */
+  color: #ffffff; /* Text color */
+}
+.createehr textarea {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background-color: #1e1e1e; /* Darker background color */
+  color: #ffffff; /* Text color */
+}
+
+.createehr button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5; /* Teal color */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.createehr button:hover {
+  background-color: #393e46; /* Darker teal color on hover */
+  transform: scale(1.05);
+}
+
+.createehr button:active {
+  transform: scale(0.95);
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .createehr {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .createehr input {
+    background-color: #1e1e1e; /* Darker background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .createehr button {
+    background-color: #00adb5; /* Teal color */
+  }
+
+  .createehr button:hover {
+    background-color: #393e46; /* Darker teal color on hover */
+  }
+}

@@ -1,0 +1,62 @@
+/* DoctorPermission.css */
+
+/* Main container */
+.DoctorPermission {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Text color */
+  height: 600px;
+}
+
+/* Heading */
+.DoctorPermission h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* Label and Input */
+.DoctorPermission label {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.DoctorPermission input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background-color: #1e1e1e; /* Darker background color */
+  color: #ffffff; /* Text color */
+}
+
+/* Check Permission button */
+.DoctorPermission button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #00adb5; /* Teal color */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.DoctorPermission button:hover {
+  background-color: #393e46; /* Darker teal color on hover */
+  transform: scale(1.05);
+}
+
+.DoctorPermission button:active {
+  transform: scale(0.95);
+}
+
+/* Loading text */
+.DoctorPermission p {
+  font-size: 18px;
+}
