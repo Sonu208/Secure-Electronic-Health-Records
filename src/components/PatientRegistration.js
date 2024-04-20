@@ -17,6 +17,7 @@ const PatientRegistration = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -67,7 +68,8 @@ const PatientRegistration = () => {
         !phoneNumber ||
         !walletAddress ||
         !gender ||
-        !password
+        !password ||
+        !bloodGroup // Check if blood group is filled
       ) {
         alert("Please fill in all the required fields.");
         return;
@@ -95,7 +97,6 @@ const PatientRegistration = () => {
 
       const isRegPatient = await contract.methods.isRegisteredPatient(walletAddress).call();
 
-
       if (isRegPatient) {
         setIsRegistered(true);
         alert("User is already registered.");
@@ -111,16 +112,17 @@ const PatientRegistration = () => {
           phoneNumber,
           walletAddress,
           gender,
-          password
+          password,
+          bloodGroup // Include blood group in the function call
         )
         .send({ from: walletAddress });
 
-        setIsLoading(false);
-        alert("Patient registered successfully!");
-        navigate("/patient_login");
-      } catch (error) {
-        console.error("Error registering patient:", error);
-        setIsLoading(false);
+      setIsLoading(false);
+      alert("Patient registered successfully!");
+      navigate("/patient_login");
+    } catch (error) {
+      console.error("Error registering patient:", error);
+      setIsLoading(false);
     }
   };
 
@@ -273,6 +275,24 @@ const PatientRegistration = () => {
                 placeholder="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                className="block font-bold text-white"
+                htmlFor="bloodGroup"
+              >
+                Blood Group:
+              </label>
+              <input
+                type="text"
+                id="bloodGroup"
+                name="bloodGroup"
+                placeholder="Blood Group"
+                value={bloodGroup}
+                onChange={(e) => setBloodGroup(e.target.value)}
                 className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
               />
             </div>
