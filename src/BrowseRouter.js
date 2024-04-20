@@ -13,6 +13,7 @@ import RecordPermission from "./components/RecordPermission";
 import DoctorPermission from "./components/DoctorPermission";
 import DoctorLoginPage from "./components/DoctorLoginPage";
 import PatientLogin from "./components/PatientLogin";
+import DiagnosticLogin from "./components/DiagnosticLogin";
 import DoctorRegistrationForm from "./components/DoctorRegistration";
 import DiagnosticRegistration from "./components/DiagnosticRegistration";
 import PatientWritePermission from "./components/PatientWritePermission";
@@ -77,6 +78,11 @@ const BrowseRouter = () => {
           path="/doctor_login"
           element={<DoctorLoginPage></DoctorLoginPage>}
         ></Route>
+        <Route
+          path="/diagnostic_login"
+          element={<DiagnosticLogin></DiagnosticLogin>}
+        ></Route>
+
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/patient/:address" element={<PatientDashBoard />}></Route>
         <Route path="/doctor/:address" element={<DoctorDashBoard />}></Route>
