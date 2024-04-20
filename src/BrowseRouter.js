@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Web3 from "web3";
 import PatientRegistration from "./components/PatientRegistration";
+
 import LoginPage from "./components/LoginPage";
 import PatientDashBoard from "./components/PatientDashBoard";
 import DoctorDashBoard from "./components/DoctorDashBoard";
@@ -13,6 +14,7 @@ import DoctorPermission from "./components/DoctorPermission";
 import DoctorLoginPage from "./components/DoctorLoginPage";
 import PatientLogin from "./components/PatientLogin";
 import DoctorRegistrationForm from "./components/DoctorRegistration";
+import DiagnosticRegistration from "./components/DiagnosticRegistration";
 import PatientWritePermission from "./components/PatientWritePermission";
 import DoctorPermissionPage from "./components/DoctorPermissionPage";
 import ContractInteractionDoctor from "./components/ContractInteractionDoctor";
@@ -62,6 +64,10 @@ const BrowseRouter = () => {
         <Route
           path="/doctor_registration"
           element={<DoctorRegistrationForm></DoctorRegistrationForm>}
+        ></Route>
+         <Route
+          path="/diagnostic_registration"
+          element={<DiagnosticRegistration></DiagnosticRegistration>}
         ></Route>
         <Route
           path="/patient_login"
