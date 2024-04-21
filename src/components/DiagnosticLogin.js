@@ -66,7 +66,7 @@ const DiagnosticLogin = () => {
 
       // If password is valid and diagnostic center is registered, proceed with login
       setIsLoggedIn(true);
-      navigate("/");
+      navigate("/diagnostic/" + diagnosticAddress);
     } catch (error) {
       console.error("Error checking registration:", error);
     } finally {

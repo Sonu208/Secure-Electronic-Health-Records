@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Web3 from "web3";
 import PatientRegistration from "./components/PatientRegistration";
-
 import LoginPage from "./components/LoginPage";
 import PatientDashBoard from "./components/PatientDashBoard";
 import DoctorDashBoard from "./components/DoctorDashBoard";
+import DiagnosticDashBoard from "./components/DiagnosticDashboard";
 import CreateEhr from "./components/CreateEhr";
+import CreateEhr2 from "./components/CreateEhr2";
 import LandingPage from "./components/LandingPage";
 import ContractInteraction from "./components/ContractInteraction";
 import RecordPermission from "./components/RecordPermission";
@@ -86,10 +87,17 @@ const BrowseRouter = () => {
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/patient/:address" element={<PatientDashBoard />}></Route>
         <Route path="/doctor/:address" element={<DoctorDashBoard />}></Route>
+        <Route path="/diagnostic/:address" element={<DiagnosticDashBoard />}></Route>
+
         <Route
           path="/doctor/:address/createehr"
           element={<CreateEhr web3={web3} />}
         ></Route>
+        <Route
+          path="/diagnostic/:address/createehr2"
+          element={<CreateEhr2 web3={web3} />}
+        ></Route>
+
         <Route
           path="/patient/:address/viewrecord"
           element={<ContractInteraction />}
