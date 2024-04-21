@@ -3,15 +3,15 @@ import record2 from "../build/contracts/record2.json"; // Adjust the path as nee
 import Web3 from "web3"; // Import Web3 here
 import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import "../big_css/CreateEHR.css";
+import "../big_css/CreateEHR2.css";
 import axios from 'axios'; // Import axios here
 import NavBar_Logout from "./NavBar_Logout";
 
-const CreateEhr = () => {
+const CreateEHR2 = () => {
   const navigate = useNavigate();
   const { address } = useParams(); // Retrieve account address from URL
   const [web3Instance, setWeb3Instance] = useState(null);
-  const [recId, setRecId] = useState("EHR" + uuidv4());
+  const [recId, setRecId] = useState("EHR2" + uuidv4());
   const [formData, setFormData] = useState({
     patientName: "",
     doctorName: "",
@@ -135,7 +135,7 @@ const CreateEhr = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = ""; // This will reset the file input
       }
-      const newRecId = "EHR" + uuidv4();
+      const newRecId = "EHR2" + uuidv4();
       setRecId(newRecId);
       navigate("/diagnostic/"+address)
     } catch (error) {
@@ -291,4 +291,4 @@ const CreateEhr = () => {
   );
 };
 
-export default CreateEhr;
+export default CreateEHR2;
