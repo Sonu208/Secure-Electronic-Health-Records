@@ -1,47 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-contract record {
+contract RecordContract {
     struct Record {
-        string recordId;
-        string patientName;
-        string doctorName;
-        address doctorAddress;
-        address patientAddress;
-        uint256 age;
-        string gender;
         string diagnosis;
         string prescription;
-        string cid;
         string docSignature;
     }
+    
     mapping(address => Record[]) private records;
     mapping(address => mapping(address => bool)) private doctorPermissions;
 
     function createEHR(
-        string memory _recordId,
-        string memory _patientName,
-        string memory _doctorName,
-        address _doctorAddress,
-        address _patientAddress,
-        uint256 _age,
-        string memory _gender,
         string memory _diagnosis,
         string memory _prescription,
-        string memory _cid,
         string memory _docSignature
     ) public {
         Record memory newRecord = Record(
-            _recordId,
-            _patientName,
-            _doctorName,
-            _doctorAddress,
-            _patientAddress,
-            _age,
-            _gender,
             _diagnosis,
             _prescription,
-            _cid,
             _docSignature
         );
         records[msg.sender].push(newRecord);
