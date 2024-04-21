@@ -94,7 +94,7 @@ const CreateEhr = () => {
     <div className="createehr min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-black to-gray-800 font-mono">
       <div className="w-full max-w-2xl">
         <h2 className="text-3xl text-white mb-6 font-bold text-center">
-          Create Electronic Health Record
+          Consulting
         </h2>
         <form
           className="bg-gray-900 p-6 rounded-lg shadow-lg grid grid-cols-1 sm:grid-cols-2 gap-4"
@@ -146,7 +146,7 @@ const CreateEhr = () => {
                 type="submit"
                 className="px-5 py-2.5 bg-custom-teal text-white font-bold text-lg rounded-lg cursor-pointer mt-3 mr-5 transition-transform transition-background-color duration-300 ease-in hover:bg-gray-400 transform hover:scale-105"
               >
-                Create Record
+                Submit
               </button>
             </center>
           </div>

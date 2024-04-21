@@ -33,7 +33,7 @@ const LandingPage = () => {
               navigate("/diagnostic_registration");
             }}
           >
-            Diagnostic Registration
+            Diagnostic Center Registration
           </button>
         </div>
       </div>

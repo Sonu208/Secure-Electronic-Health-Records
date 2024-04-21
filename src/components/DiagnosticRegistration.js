@@ -61,7 +61,7 @@ const DiagnosticRegistrationForm = () => {
         .send({ from: diagnosticAddress });
 
       alert("Diagnostic center registered successfully!");
-      navigate("/");
+      navigate("/diagnostic_login");
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while registering the diagnostic center.");

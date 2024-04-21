@@ -32,7 +32,7 @@ const DoctorDashBoardPage = () => {
           onClick={handleClick}
           className="px-6 py-3 bg-teal-500 hover:bg-gray-600 text-white rounded-lg focus:outline-none focus:ring focus:ring-teal-400 transition duration-300"
         >
-          Create EHR
+          Consultancy
         </button>
         <button
           onClick={viewPatientRecords}

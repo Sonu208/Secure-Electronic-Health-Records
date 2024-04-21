@@ -81,7 +81,7 @@ const DiagnosticLogin = () => {
         <div className="w-full max-w-4xl bg-gray-900 p-20 rounded-lg shadow-lg">
           <h2 className="text-3xl sm:text-4xl font-bold mb-6">Diagnostic Center Login</h2>
           <div className="flex flex-col w-full mb-4">
-            <label className="mb-2 font-bold">Diagnostic Center Address:</label>
+            <label className="mb-2 font-bold">Diagnostic Center Public Address:</label>
             <input
               type="text"
               value={diagnosticAddress}
