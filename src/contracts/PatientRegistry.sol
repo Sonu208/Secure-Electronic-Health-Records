@@ -9,6 +9,7 @@ contract PatientRegistry {
         string phoneNumber;
         address walletAddress;
         string gender;
+        string bloodGroup;
         string password;
     }
 
@@ -24,6 +25,7 @@ contract PatientRegistry {
         string memory _phoneNumber,
         address _walletAddress,
         string memory _gender,
+        string memory _bloodGroup,
         string memory _password
 
     ) external {
@@ -39,6 +41,7 @@ contract PatientRegistry {
             phoneNumber: _phoneNumber,
             walletAddress: _walletAddress,
             gender: _gender,
+            bloodGroup: _bloodGroup,
             password: _password // Store password in the struct
 
         });

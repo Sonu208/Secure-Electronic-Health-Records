@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
-import PatientRegistry from "../build/contracts/PatientRegistry.json";
+import PatientRegistration from "../build/contracts/PatientRegistration.json";
 import { useNavigate } from "react-router-dom";
 import "../CSS/PatientRegistration.css";
 import NavBar from "./NavBar";
 
-const PatientRegistration = () => {
+const PatientRegistry = () => {
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
   const [name, setName] = useState("");
@@ -16,8 +16,14 @@ const PatientRegistration = () => {
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [gender, setGender] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [bg, setBloodGroup] = useState("");
+  const [email, setEmail] = useState(""); 
+  const [emailError, setEmailError] = useState("");
+  const [password, setPassword] = useState(""); // Define password state variable
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const navigate = useNavigate();
 
@@ -30,9 +36,9 @@ const PatientRegistration = () => {
           setWeb3(web3Instance);
 
           const networkId = await web3Instance.eth.net.getId();
-          const deployedNetwork = PatientRegistry.networks[networkId];
+          const deployedNetwork = PatientRegistration.networks[networkId];
           const contractInstance = new web3Instance.eth.Contract(
-            PatientRegistry.abi,
+            PatientRegistration.abi,
             deployedNetwork && deployedNetwork.address
           );
 
@@ -49,105 +55,124 @@ const PatientRegistration = () => {
   }, []);
 
   const handleRegister = async () => {
+    if (
+      !walletAddress ||
+      !name ||
+      !dateOfBirth ||
+      !homeAddress ||
+      !phoneNumber ||
+      !gender ||
+      !bg ||
+      !email ||
+      !walletAddress ||
+      !password ||
+      !confirmPassword
+    ) {
+      alert(
+        "You have missing input fields. Please fill in all the required fields."
+      );
+      return;
+    }
+
+    if (phoneNumber.length !== 10) {
+      alert(
+        "You have entered a wrong phone number. Please enter a 10-digit phone number."
+      );
+      return;
+    }
+
+    // Password validation: minimum length
+    if (password.length < 8) {
+    setPassword("");
+    setConfirmPassword("");
+    setPasswordError("Password must be atleast 8 characters long.");
+    return;
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPassword("");
+      setConfirmPasswordError("Passwords do not match.");
+      return;
+    }
+
+    // Check if dateOfBirth is in the format dd/mm/yyyy
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(dateOfBirth)) {
+      alert("Please enter Date of Birth in the format dd/mm/yyyy");
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    } else {
+      setEmailError(""); // Clear email error if valid
+    }
+
+    // Password validation: minimum length
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters long.");
+      return;
+    }
+
+      
     try {
-      if (window.ethereum) {
-        const web3Instance = new Web3(window.ethereum);
-        try {
-          if (isRegistered) {
-            alert("User is already registered.");
-            return;
-          }
-          await window.ethereum.enable();
-          setWeb3(web3Instance);
+      const web3 = new Web3(window.ethereum);
 
-          const networkId = await web3Instance.eth.net.getId();
-          const deployedNetwork = PatientRegistry.networks[networkId];
-          const contractInstance = new web3Instance.eth.Contract(
-            PatientRegistry.abi,
-            deployedNetwork && deployedNetwork.address
-          );
+      const networkId = await web3.eth.net.getId();
 
-          setContract(contractInstance);
-        } catch (error) {
-          console.error("User denied access to accounts.");
-        }
-      } else {
-        console.log("Please install MetaMask extension");
-      }
+      const contract = new web3.eth.Contract(
+        PatientRegistration.abi,
+        PatientRegistration.networks[networkId].address
+      );
 
-      if (
-        !name ||
-        !dateOfBirth ||
-        !dateOfBirth ||
-        !gender ||
-        !phoneNumber ||
-        !homeAddress ||
-        !walletAddress
-      ) {
-        alert(
-          "You have missing input fields. Please fill in all the required fields."
-        );
-        return;
-      }
-
-      if (phoneNumber.length !== 10) {
-        alert(
-          "You have entered a wrong phone number. Please enter a 10-digit phone number."
-        );
-        return;
-      }
-
-      // Check if dateOfBirth is in the format dd/mm/yyyy
-      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-      if (!datePattern.test(dateOfBirth)) {
-        alert("Please enter Date of Birth in the format dd/mm/yyyy");
-        return;
-      }
-
-      // Password validation: minimum length
-      if (password.length < 8) {
-        alert("Password must be at least 8 characters long.");
-        return;
-      }
-
-      setIsLoading(true);
       const isRegPatient = await contract.methods
-        .isRegisteredPatient(walletAddress)
-        .call({ from: walletAddress });
+        .isRegisteredPatient(phoneNumber)
+        .call();
 
       if (isRegPatient) {
-        setIsRegistered(true);
-        alert("User is already registered.");
-        setIsLoading(false);
+        alert("Patient already exists");
         return;
       }
 
       await contract.methods
-        .registerPatient(
-          name,
-          dateOfBirth,
-          homeAddress,
-          phoneNumber,
-          walletAddress,
-          gender,
-          password
-        )
-        .send({ from: walletAddress });
-      setName("");
-      setHomeAddress("");
-      setDateOfBirth("");
-      setPhoneNumber("");
-      setWalletAddress("");
-      setGender("");
-      setPassword("");
+      .registerPatient(
+        walletAddress,
+        name,
+        dateOfBirth,
+        gender,
+        bg,
+        homeAddress,
+        email,
+        phoneNumber,
+        password
+      )
+      .send({ from: walletAddress });
 
       alert("Patient registered successfully!");
-      navigate("/patient_login");
-    } catch (error) {
-      console.error("Error registering patient:", error);
-    } finally {
-      setIsLoading(false);
-    }
+      navigate("/");
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while registering the doctor.");
+      }
+  };
+  
+
+  const handleEmailChange = (e) => {
+    const inputEmail = e.target.value;
+    setEmail(inputEmail);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setPasswordError("");
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    setConfirmPasswordError("");
   };
 
   const handlePhoneNumberChange = (e) => {
@@ -162,6 +187,10 @@ const PatientRegistration = () => {
     }
   };
 
+  const cancelOperation = () => {
+    navigate("/");
+  };
+
   return (
     <div>
     <NavBar></NavBar>
@@ -172,14 +201,31 @@ const PatientRegistration = () => {
         </h2>
         <form className="bg-gray-900 p-6 rounded-lg shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
+            <label
+              className="block font-bold text-white"
+              htmlFor="walletAddress"
+            >
+              Wallet Public Address
+            </label>
+            <input
+              type="text"
+              id="walletAddress"
+              name="walletAddress"
+              placeholder="Crypto Wallet's Public Address"
+              value={walletAddress}
+              onChange={(e) => setWalletAddress(e.target.value)}
+              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
+            />
+            </div>
+          <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="name">
-              Patient Full Name:
+              Full Name
             </label>
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Patient's Full Name"
+              placeholder="Enter Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
@@ -188,7 +234,7 @@ const PatientRegistration = () => {
 
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="dateOfBirth">
-              Date of Birth:
+              Date of Birth
             </label>
             <input
               id="dateOfBirth"
@@ -200,16 +246,59 @@ const PatientRegistration = () => {
               onChange={(e) => setDateOfBirth(e.target.value)}
             />
           </div>
+            
+          <div className="mb-4">
+          <label className="block font-bold text-white" htmlFor="gender">
+            Gender
+          </label>
+          <select
+            id="gender"
+            name="gender"
+            required
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block font-bold text-white" htmlFor="gender">
+            Blood Group
+          </label>
+          <select
+            id="bg"
+            name="bg"
+            required
+            value={bg}
+            onChange={(e) => setBloodGroup(e.target.value)}
+            className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
+          >
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="B+">O+</option>
+            <option value="B-">O-</option>
+            <option value="B+">AB+</option>
+            <option value="B-">AB-</option>
+          </select>
+        </div>
 
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="homeAddress">
-              Home Address:
+              Home Address
             </label>
             <input
               type="text"
               id="homeAddress"
               name="homeAddress"
-              placeholder="Permanent Address"
+              placeholder="Enter your Permanent Address"
               value={homeAddress}
               onChange={(e) => setHomeAddress(e.target.value)}
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
@@ -218,7 +307,7 @@ const PatientRegistration = () => {
 
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="phoneNumber">
-              Phone Number:
+              Phone Number
             </label>
             <input
               id="phoneNumber"
@@ -226,7 +315,7 @@ const PatientRegistration = () => {
               type="text"
               required
               className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${phoneNumberError && "border-red-500"}`}
-              placeholder="Phone Number"
+              placeholder="Enter your Mobile Number"
               value={phoneNumber}
               onChange={handlePhoneNumberChange}
             />
@@ -234,64 +323,72 @@ const PatientRegistration = () => {
               <p className="text-red-500 text-sm mt-1">{phoneNumberError}</p>
             )}
           </div>
-
+          
           <div className="mb-4">
-            <label
-              className="block font-bold text-white"
-              htmlFor="walletAddress"
-            >
-              Patient's Wallet Public Address:
+            <label className="block font-bold text-white" htmlFor="email">
+              Email Address
             </label>
             <input
-              type="text"
-              id="walletAddress"
-              name="walletAddress"
-              placeholder="Public Address"
-              value={walletAddress}
-              onChange={(e) => setWalletAddress(e.target.value)}
-              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="gender">
-              Gender:
-            </label>
-            <select
-              id="gender"
-              name="gender"
+              id="email"
+              name="email"
+              type="email"
               required
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label
-              className="block font-bold text-white"
-              htmlFor="password"
-            >
-              Password:
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${
+                emailError && "border-red-500"
+              }`}
+              placeholder="Enter your Email-id"
+              value={email}
+              onChange={handleEmailChange}
             />
+            {emailError && (
+              <p className="text-red-500 text-sm mt-1">{emailError}</p>
+            )}
+          </div>
+            
+          <div className="mb-4">
+              <label className="block font-bold text-white" htmlFor="password">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${
+                  passwordError && "border-red-500"
+                }`}
+                placeholder="Enter your Password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              {passwordError && (
+                <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+              )}
+            </div>
+            
+          <div className="mb-4">
+              <label className="block font-bold text-white" htmlFor="confirmPassword">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${
+                  confirmPasswordError && "border-red-500"
+                }`}
+                placeholder="Confirm your Password"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+              />
+              {confirmPasswordError && (
+                <p className="text-red-500 text-sm mt-1">{confirmPasswordError}</p>
+              )}
           </div>
 
-          <div className="md:col-span-2 flex justify-center mt-6">
+
+          <div className="space-x-4 md:col-span-2 flex justify-center mt-6">
             <button
               type="button"
               onClick={handleRegister}
@@ -299,6 +396,12 @@ const PatientRegistration = () => {
               className="px-5 py-2.5 bg-teal-500 text-white font-bold text-lg rounded-lg cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-600 disabled:bg-gray-500 disabled:cursor-not-allowed w-full md:w-auto"
             >
               Register
+            </button>
+            <button
+              onClick={cancelOperation}
+              className="px-5 py-2.5 bg-teal-500 text-white font-bold text-lg rounded-lg cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-600 disabled:bg-gray-500 disabled:cursor-not-allowed w-full md:w-auto"
+              >
+              Close
             </button>
           </div>
         </form>
@@ -308,4 +411,4 @@ const PatientRegistration = () => {
   );
 };
 
-export default PatientRegistration;
+export default PatientRegistry;
