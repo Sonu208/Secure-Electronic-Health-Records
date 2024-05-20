@@ -12,6 +12,7 @@ import ContractInteraction from "./components/ContractInteraction";
 import RecordPermission from "./components/RecordPermission";
 import DoctorPermission from "./components/DoctorPermission";
 import DoctorLoginPage from "./components/DoctorLogin";
+import DoctorConsultancy from "./components/DoctorForm";
 import PatientLogin from "./components/PatientLogin";
 import DiagnosticLogin from "./components/DiagnosticLogin";
 import DoctorRegistrationForm from "./components/DoctorRegistration";
@@ -23,6 +24,8 @@ import Footer from "./components/Footer";
 import LandingPage_1 from "./components/LandingPage_1";
 import ViewProfile from "./components/ViewProfile";
 import ViewDoctorProfile from "./components/ViewDoctorProfile";
+import DoctorViewPatient from "./components/DoctorViewRecords";
+
 
 const BrowseRouter = () => {
   const [web3, setWeb3] = useState(null);
@@ -79,6 +82,14 @@ const BrowseRouter = () => {
         <Route
           path="/doctor_login"
           element={<DoctorLoginPage></DoctorLoginPage>}
+        ></Route>
+         <Route
+          path="/doctor/:phoneNumber/doctorform"
+          element={<DoctorConsultancy></DoctorConsultancy>}
+        ></Route>
+        <Route
+          path="/doctor/:phoneNumber/doctorviewpatient"
+          element={<DoctorViewPatient></DoctorViewPatient>}
         ></Route>
         <Route
           path="/diagnostic_login"
