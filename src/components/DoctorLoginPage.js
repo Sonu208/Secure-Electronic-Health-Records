@@ -81,7 +81,7 @@ const DoctorLoginPage = () => {
           onClick={handleCheckRegistration}
           className="px-6 py-3 bg-teal-500 text-white font-bold text-lg rounded-lg cursor-pointer transition-transform transition-colors duration-300 ease-in hover:bg-teal-600 active:bg-teal-700"
         >
-          Check Registration
+          Login
         </button>
       </div>
       </div>

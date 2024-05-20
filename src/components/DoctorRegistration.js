@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import "../CSS/DoctorRegistration.css";
 import NavBar from "./NavBar";
 
-const DoctorRegistrationForm = () => {
+const DoctorRegistry = () => {
   const [doctorAddress, setDoctorAddress] = useState("");
   const [doctorName, setDoctorName] = useState("");
   const [hospitalName, setHospitalName] = useState("");
+  const [hospitalLocation, setHospitalLocation] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -21,6 +22,11 @@ const DoctorRegistrationForm = () => {
   const [departmentError, setDepartmentError] = useState("");
   const [designationError, setDesignationError] = useState("");
   const [password, setPassword] = useState(""); // Define password state variable
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [email, setEmail] = useState(""); 
+  const [emailError, setEmailError] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,14 +35,17 @@ const DoctorRegistrationForm = () => {
       !doctorAddress ||
       !doctorName ||
       !hospitalName ||
+      !hospitalLocation ||
       !dateOfBirth ||
       !gender ||
+      !email ||
       !phoneNumber ||
       !specialization ||
       !department ||
       !designation ||
       !workExperience ||
-      !password
+      !password ||
+      !confirmPassword
     ) {
       alert(
         "You have missing input fields. Please fill in all the required fields."
@@ -53,9 +62,26 @@ const DoctorRegistrationForm = () => {
 
      // Password validation: minimum length
     if (password.length < 8) {
-    alert("Password must be at least 8 characters long.");
+    setPassword("");
+    setConfirmPassword("");
+    setPasswordError("Password must be atleast 8 characters long.");
     return;
-      }
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPassword("");
+      setConfirmPasswordError("Passwords do not match.");
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    } else {
+      setEmailError(""); // Clear email error if valid
+    }
       
     try {
       const web3 = new Web3(window.ethereum);
@@ -68,7 +94,7 @@ const DoctorRegistrationForm = () => {
       );
 
       const isRegDoc = await contract.methods
-        .isRegisteredDoctor(doctorAddress)
+        .isRegisteredDoctor(phoneNumber)
         .call();
 
       if (isRegDoc) {
@@ -78,11 +104,11 @@ const DoctorRegistrationForm = () => {
 
       await contract.methods
         .registerDoctor(
-          doctorAddress,
           doctorName,
           hospitalName,
           dateOfBirth,
           gender,
+          email,
           phoneNumber,
           specialization,
           department,
@@ -98,6 +124,11 @@ const DoctorRegistrationForm = () => {
         console.error("Error:", error);
         alert("An error occurred while registering the doctor.");
       }
+  };
+  
+    const handleEmailChange = (e) => {
+      const inputEmail = e.target.value;
+      setEmail(inputEmail);
     };
 
     const handlePhoneNumberChange = (e) => {
@@ -110,7 +141,17 @@ const DoctorRegistrationForm = () => {
         setPhoneNumber(inputPhoneNumber);
         setPhoneNumberError("Please enter a 10-digit phone number.");
       }
-    };
+  };
+  
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setPasswordError("");
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    setConfirmPasswordError("");
+  };
   
     // Function to handle changes in Specialization dropdown
     const handleSpecializationChange = (e) => {
@@ -137,7 +178,11 @@ const DoctorRegistrationForm = () => {
       if (value === "Other") {
         setDesignationError("");
       }
-    };
+  };
+  
+  const cancelOperation = () => {
+    navigate("/");
+  };
 
   return (
     <div>
@@ -153,7 +198,7 @@ const DoctorRegistrationForm = () => {
               className="block font-bold text-white"
               htmlFor="doctorAddress"
             >
-              Doctor's Wallet Public Address:
+              Wallet Public Address
             </label>
             <input
               id="doctorAddress"
@@ -161,14 +206,14 @@ const DoctorRegistrationForm = () => {
               type="text"
               required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
-              placeholder="Public Address"
+              placeholder="Crypto Wallet's Public Address"
               value={doctorAddress}
               onChange={(e) => setDoctorAddress(e.target.value)}
             />
           </div>
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="doctorName">
-              Doctor Full Name:
+              Full Name
             </label>
             <input
               id="doctorName"
@@ -176,7 +221,7 @@ const DoctorRegistrationForm = () => {
               type="text"
               required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
-              placeholder="Doctor's Full Name"
+              placeholder="Enter Full Name"
               value={doctorName}
               onChange={(e) => setDoctorName(e.target.value)}
             />
@@ -186,7 +231,7 @@ const DoctorRegistrationForm = () => {
               className="block font-bold text-white"
               htmlFor="hospitalName"
             >
-              Hospital Name:
+              Hospital Name
             </label>
             <input
               id="hospitalName"
@@ -194,14 +239,32 @@ const DoctorRegistrationForm = () => {
               type="text"
               required
               className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
-              placeholder="Hospital Name"
+              placeholder="Enter Hospital Name"
               value={hospitalName}
               onChange={(e) => setHospitalName(e.target.value)}
+            />
+            </div>
+          <div className="mb-4">
+            <label
+              className="block font-bold text-white"
+              htmlFor="hospitalLocation"
+            >
+              Hospital Location
+            </label>
+            <input
+              id="hospitalLocation"
+              name="hospitalLocation"
+              type="text"
+              required
+              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
+              placeholder="Enter Hospital Location"
+              value={hospitalLocation}
+              onChange={(e) => setHospitalLocation(e.target.value)}
             />
           </div>
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="dateOfBirth">
-              Date of Birth:
+              Date of Birth
             </label>
             <input
               id="dateOfBirth"
@@ -215,7 +278,7 @@ const DoctorRegistrationForm = () => {
           </div>
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="gender">
-              Gender:
+              Gender
             </label>
             <select
               id="gender"
@@ -230,10 +293,32 @@ const DoctorRegistrationForm = () => {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
+            </div>
+
+          <div className="mb-4">
+            <label className="block font-bold text-white" htmlFor="email">
+              Email Address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${
+                emailError && "border-red-500"
+              }`}
+              placeholder="Enter your Email-id"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            {emailError && (
+              <p className="text-red-500 text-sm mt-1">{emailError}</p>
+            )}
           </div>
+            
           <div className="mb-4">
             <label className="block font-bold text-white" htmlFor="phoneNumber">
-              Phone Number:
+              Phone Number
             </label>
             <input
               id="phoneNumber"
@@ -241,7 +326,7 @@ const DoctorRegistrationForm = () => {
               type="text"
               required
               className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${phoneNumberError && "border-red-500"}`}
-              placeholder="Phone Number"
+              placeholder="Enter your Phone Number"
               value={phoneNumber}
               onChange={handlePhoneNumberChange}
             />
@@ -255,7 +340,7 @@ const DoctorRegistrationForm = () => {
               className="block font-bold text-white"
               htmlFor="specialization"
             >
-              Specialization:
+              Specialization
             </label>
             <select
               id="specialization"
@@ -268,9 +353,7 @@ const DoctorRegistrationForm = () => {
               <option value="">Select Specialization</option>
               <option value="Cardiology">Cardiology</option>
               <option value="Neurology">Neurology</option>
-              <option value="Orthopedics">Orthopedics</option>
               <option value="Oncology">Oncology</option>
-              <option value="Pediatrics">Pediatrics</option>
               <option value="Gynecology">Gynecology</option>
               <option value="Dermatology">Dermatology</option>
               <option value="Ophthalmology">Ophthalmology</option>
@@ -294,7 +377,7 @@ const DoctorRegistrationForm = () => {
               className="block font-bold text-white"
               htmlFor="department"
             >
-              Department:
+              Department
             </label>
             <select
               id="department"
@@ -305,16 +388,9 @@ const DoctorRegistrationForm = () => {
               onChange={handleDepartmentChange}
             >
               <option value="">Select Department</option>
-              <option value="Emergency Department (ER)">Emergency Department (ER)</option>
-              <option value="Intensive Care Unit (ICU)">Intensive Care Unit (ICU)</option>
-              <option value="Surgery Department">Surgery Department</option>
-              <option value="Laboratory Services">Laboratory Services</option>
-              <option value="Pharmacy">Pharmacy</option>
-              <option value="Radiology Department">Radiology Department</option>
-              <option value="Obstetrics and Gynecology Department">Obstetrics and Gynecology Department</option>
-              <option value="Pediatrics Department">Pediatrics Department</option>
-              <option value="Orthopedics Department">Orthopedics Department</option>
-              <option value="Cardiology Department">Cardiology Department</option>
+              <option value="Casualty">Casualty</option>
+              <option value="Surgery">Surgery</option>
+              <option value="Laboratory Services">Consultancy</option>
               <option value="Other">Other</option>
             </select>
             {department === "Other" && (
@@ -333,7 +409,7 @@ const DoctorRegistrationForm = () => {
               className="block font-bold text-white"
               htmlFor="designation"
             >
-              Designation:
+              Designation
             </label>
             <select
               id="designation"
@@ -365,7 +441,7 @@ const DoctorRegistrationForm = () => {
               className="block font-bold text-white"
               htmlFor="workExperience"
             >
-              Work Experience:
+              Work Experience
             </label>
             <input
               id="workExperience"
@@ -381,32 +457,62 @@ const DoctorRegistrationForm = () => {
           </div>
           
           <div className="mb-4">
-            <label
-              className="block font-bold text-white"
-              htmlFor="password"
-            >
-              Password:
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              className="mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+              <label className="block font-bold text-white" htmlFor="password">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${
+                  passwordError && "border-red-500"
+                }`}
+                placeholder="Enter your Password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              {passwordError && (
+                <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+              )}
           </div>
+            
+          <div className="mb-4">
+              <label className="block font-bold text-white" htmlFor="confirmPassword">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${
+                  confirmPasswordError && "border-red-500"
+                }`}
+                placeholder="Confirm your Password"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+              />
+              {confirmPasswordError && (
+                <p className="text-red-500 text-sm mt-1">{confirmPasswordError}</p>
+              )}
+          </div>
+
         </form>
-        <div className="text-center mt-6">
+        <div className="space-x-4 text-center mt-6">
           <button
             type="button"
             onClick={handleRegister}
             className="py-3 px-4 bg-teal-500 text-white rounded-md font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
           >
             Register Doctor
-          </button>
+            </button>
+            <button
+              onClick={cancelOperation}
+              className="py-3 px-4 bg-teal-500 text-white rounded-md font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+              >
+              Close
+            </button>
         </div>
       </div>
       </div>
@@ -414,4 +520,4 @@ const DoctorRegistrationForm = () => {
   );
 };
 
-export default DoctorRegistrationForm;
+export default DoctorRegistry;
