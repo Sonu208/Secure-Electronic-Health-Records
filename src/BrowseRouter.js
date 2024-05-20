@@ -7,12 +7,11 @@ import PatientDashBoard from "./components/PatientDashBoard";
 import DoctorDashBoard from "./components/DoctorDashBoard";
 import DiagnosticDashBoard from "./components/DiagnosticDashboard";
 import CreateEhr from "./components/CreateEhr";
-import CreateEhr2 from "./components/CreateEhr2";
 import LandingPage from "./components/LandingPage";
 import ContractInteraction from "./components/ContractInteraction";
 import RecordPermission from "./components/RecordPermission";
 import DoctorPermission from "./components/DoctorPermission";
-import DoctorLoginPage from "./components/DoctorLoginPage";
+import DoctorLoginPage from "./components/DoctorLogin";
 import PatientLogin from "./components/PatientLogin";
 import DiagnosticLogin from "./components/DiagnosticLogin";
 import DoctorRegistrationForm from "./components/DoctorRegistration";
@@ -22,6 +21,8 @@ import DoctorPermissionPage from "./components/DoctorPermissionPage";
 import ContractInteractionDoctor from "./components/ContractInteractionDoctor";
 import Footer from "./components/Footer";
 import LandingPage_1 from "./components/LandingPage_1";
+import ViewProfile from "./components/ViewProfile";
+import ViewDoctorProfile from "./components/ViewDoctorProfile";
 
 const BrowseRouter = () => {
   const [web3, setWeb3] = useState(null);
@@ -94,13 +95,16 @@ const BrowseRouter = () => {
           element={<CreateEhr web3={web3} />}
         ></Route>
         <Route
-          path="/diagnostic/:address/createehr2"
-          element={<CreateEhr2 web3={web3} />}
-        ></Route>
-
-        <Route
           path="/patient/:address/viewrecord"
           element={<ContractInteraction />}
+        ></Route>
+        <Route
+          path="/patient/:phoneNumber/viewprofile"
+          element={<ViewProfile />}
+        ></Route>
+        <Route
+          path="/doctor/:phoneNumber/viewdoctorprofile"
+          element={<ViewDoctorProfile />}
         ></Route>
         <Route
           path="/patient/:address/permissionstab"
