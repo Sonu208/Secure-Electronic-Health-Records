@@ -2,51 +2,70 @@
 pragma solidity ^0.8.19;
 
 contract DiagnosticRegistration {
-    struct DiagnosticCenter {
-        address diagnosticAddress;
-        string diagnosticCenterName;
+    struct Diagnostic {
+        address walletAddress;
+        string diagnosticName;
+        string hospitalName;
+        string diagnosticLocation;
+        string email;
         string phoneNumber;
-        string personalAddress; // Renamed variable from 'address' to 'personalAddress'
         string password;
     }
 
-    mapping(address => DiagnosticCenter) private diagnosticCenters;
-    mapping(address => bool) private isDiagnosticCenterRegistered;
+    mapping(string => address) private diagnosticAddresses;
+    mapping(string => Diagnostic) private diagnostics;
 
-    event DiagnosticCenterRegistered(address indexed diagnosticAddress, string diagnosticCenterName);
+    event DiagnosticRegistered(string phoneNumber, string diagnosticName, address walletAddress);
 
     function registerDiagnostic(
-        address _diagnosticAddress,
-        string memory _diagnosticCenterName,
+        string memory _diagnosticName,
+        string memory _hospitalName,
+        string memory _diagnosticLocation,
+        string memory _email,
         string memory _phoneNumber,
-        string memory _personalAddress, // Renamed variable from 'address' to 'personalAddress'
         string memory _password
     ) external {
-        require(!isDiagnosticCenterRegistered[_diagnosticAddress], "Diagnostic center already registered");
+        require(diagnosticAddresses[_phoneNumber] == address(0), "Diagnostic already registered");
 
-        DiagnosticCenter memory newDiagnosticCenter = DiagnosticCenter({
-            diagnosticAddress: _diagnosticAddress,
-            diagnosticCenterName: _diagnosticCenterName,
+        Diagnostic memory newDiagnostic = Diagnostic({
+            walletAddress: msg.sender,
+            diagnosticName: _diagnosticName,
+            hospitalName: _hospitalName,
+            diagnosticLocation: _diagnosticLocation,
+            email: _email,
             phoneNumber: _phoneNumber,
-            personalAddress: _personalAddress, // Renamed variable from 'address' to 'personalAddress'
             password: _password
         });
 
-        diagnosticCenters[_diagnosticAddress] = newDiagnosticCenter;
-        isDiagnosticCenterRegistered[_diagnosticAddress] = true;
-
-        emit DiagnosticCenterRegistered(_diagnosticAddress, _diagnosticCenterName);
+        diagnostics[_phoneNumber] = newDiagnostic;
+        diagnosticAddresses[_phoneNumber] = msg.sender;
+        emit DiagnosticRegistered(_phoneNumber, _diagnosticName, msg.sender);
     }
 
-    function validateDiagnosticPassword(address _diagnosticAddress, string memory _password) external view returns (bool) {
-        return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(diagnosticCenters[_diagnosticAddress].password));
+    function isRegisteredDiagnostic(string memory _phoneNumber) external view returns (bool) {
+        return diagnosticAddresses[_phoneNumber] != address(0);
     }
 
-    function getDiagnosticCenterDetails(address _diagnosticAddress) external view returns (DiagnosticCenter memory) {
-        return diagnosticCenters[_diagnosticAddress];
+    function getDiagnosticDetails(string memory _phoneNumber) external view returns (
+        address _walletAddress,
+        string memory _diagnosticName,
+        string memory _hospitalName,
+        string memory _diagnosticLocation,
+        string memory _email
+    ) {
+        require(diagnosticAddresses[_phoneNumber] != address(0), "Diagnostic not registered");
+        Diagnostic memory diagnostic = diagnostics[_phoneNumber];
+        return (
+            diagnostic.walletAddress,
+            diagnostic.diagnosticName,
+            diagnostic.hospitalName,
+            diagnostic.diagnosticLocation,
+            diagnostic.email
+        );
     }
 
-    function isRegisteredDiagnostic(address _diagnosticAddress) external view returns (bool) {
-        return isDiagnosticCenterRegistered[_diagnosticAddress];
+    function validatePassword(string memory _phoneNumber, string memory _password) external view returns (bool) {
+        require(diagnosticAddresses[_phoneNumber] != address(0), "Diagnostic not registered");
+        return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(diagnostics[_phoneNumber].password));
     }
 }

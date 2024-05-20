@@ -1,77 +1,70 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Web3 from "web3";
-import DiagnosticRegistration from "../build/contracts/DiagnosticRegistration.json"; // Update import path
+import DiagnosticRegistration from "../build/contracts/DiagnosticRegistration.json";
 import { useNavigate } from "react-router-dom";
-import "../CSS/DiagnosticLogin.css"; // Update CSS import path
+import "../CSS/DoctorLoginPage.css";
 import NavBar from "./NavBar";
 
 const DiagnosticLogin = () => {
   const navigate = useNavigate();
-  const [web3, setWeb3] = useState(null);
-  const [contract, setContract] = useState(null);
-  const [diagnosticAddress, setDiagnosticAddress] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [diagnosticDetails, setDiagnosticDetails] = useState(null);
 
-  useEffect(() => {
-    const init = async () => {
-      if (window.ethereum) {
-        const web3Instance = new Web3(window.ethereum);
-        try {
-          await window.ethereum.enable();
-          setWeb3(web3Instance);
+  const handlePhoneNumberChange = (e) => {
+    const inputPhoneNumber = e.target.value;
+    const phoneRegex = /^\d{10}$/;
+    if (phoneRegex.test(inputPhoneNumber)) {
+      setPhoneNumber(inputPhoneNumber);
+      setPhoneNumberError("");
+    } else {
+      setPhoneNumber(inputPhoneNumber);
+      setPhoneNumberError("Please enter a 10-digit phone number.");
+    }
+  };
 
-          const networkId = await web3Instance.eth.net.getId();
-          const deployedNetwork = DiagnosticRegistration.networks[networkId];
-          const contractInstance = new web3Instance.eth.Contract(
-            DiagnosticRegistration.abi,
-            deployedNetwork && deployedNetwork.address
-          );
-          setContract(contractInstance);
-        } catch (error) {
-          console.error("User denied access to accounts.");
+  const handleCheckRegistration = async () => {
+    try {
+      const web3 = new Web3(window.ethereum);
+      const networkId = await web3.eth.net.getId();
+      const deployedNetwork = DiagnosticRegistration.networks[networkId];
+      const contract = new web3.eth.Contract(
+        DiagnosticRegistration.abi,
+        deployedNetwork && deployedNetwork.address
+      );
+
+      const isRegisteredResult = await contract.methods
+        .isRegisteredDiagnostic(phoneNumber)
+        .call();
+      setIsRegistered(isRegisteredResult);
+
+      if (isRegisteredResult) {
+        const isValidPassword = await contract.methods
+          .validatePassword(phoneNumber, password)
+          .call();
+
+        if (isValidPassword) {
+          const diagnostic = await contract.methods
+            .getDiagnosticDetails(phoneNumber)
+            .call();
+          setDiagnosticDetails(diagnostic);
+          navigate("/diagnostic/" + phoneNumber);
+        } else {
+          alert("Incorrect password");
         }
       } else {
-        console.log("Please install MetaMask extension");
+        alert("Diagnostic not registered");
       }
-    };
-
-    init();
-  }, []);
-
-  const handleLogin = async () => {
-    try {
-      setIsLoading(true);
-
-      // Validate diagnostic center's password
-      const isValidPassword = await contract.methods
-        .validateDiagnosticPassword(diagnosticAddress, password)
-        .call();
-
-      if (!isValidPassword) {
-        alert("Incorrect password");
-        return;
-      }
-
-      // Check if diagnostic center is registered
-      const isRegistered = await contract.methods
-        .isRegisteredDiagnostic(diagnosticAddress)
-        .call();
-
-      if (!isRegistered) {
-        alert("Diagnostic center not registered");
-        return;
-      }
-
-      // If password is valid and diagnostic center is registered, proceed with login
-      setIsLoggedIn(true);
-      navigate("/diagnostic/" + diagnosticAddress);
     } catch (error) {
       console.error("Error checking registration:", error);
-    } finally {
-      setIsLoading(false);
+      alert("An error occurred while checking registration.");
     }
+  };
+
+  const cancelOperation = () => {
+    navigate("/");
   };
 
   return (
@@ -79,35 +72,51 @@ const DiagnosticLogin = () => {
       <NavBar />
       <div className="bg-gradient-to-b from-black to-gray-800 min-h-screen flex flex-col justify-center items-center p-4 font-mono text-white">
         <div className="w-full max-w-4xl bg-gray-900 p-20 rounded-lg shadow-lg">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">Diagnostic Center Login</h2>
-          <div className="flex flex-col w-full mb-4">
-            <label className="mb-2 font-bold">Diagnostic Center Public Address:</label>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">Diagnostic Login</h2>
+          <div className="mb-4">
+            <label className="block font-bold text-white" htmlFor="phoneNumber">
+              Phone Number
+            </label>
             <input
+              id="phoneNumber"
+              name="phoneNumber"
               type="text"
-              value={diagnosticAddress}
-              onChange={(e) => setDiagnosticAddress(e.target.value)}
-              className="p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
               required
+              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${phoneNumberError && "border-red-500"}`}
+              placeholder="Phone Number"
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
             />
+            {phoneNumberError && (
+              <p className="text-red-500 text-sm mt-1">{phoneNumberError}</p>
+            )}
           </div>
-          {/* Password input field */}
+
           <div className="flex flex-col w-full mb-4">
-            <label className="mb-2 font-bold">Password:</label>
+            <label className="mb-2 font-bold">Password</label>
             <input
               type="password"
+              placeholder="Enter your Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover:bg-gray-800 transition duration-200"
               required
             />
           </div>
+          <div className="space-x-4 text-center mt-6">
           <button
-            onClick={handleLogin}
-            disabled={!contract || isLoading}
+            onClick={handleCheckRegistration}
             className="px-6 py-3 bg-teal-500 text-white font-bold text-lg rounded-lg cursor-pointer transition-transform transition-colors duration-300 ease-in hover:bg-teal-600 active:bg-teal-700"
           >
             Login
-          </button>
+            </button>
+            <button
+              onClick={cancelOperation}
+              className="px-6 py-3 bg-teal-500 text-white font-bold text-lg rounded-lg cursor-pointer transition-transform transition-colors duration-300 ease-in hover:bg-teal-600 active:bg-teal-700"
+              >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
