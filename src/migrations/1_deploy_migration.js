@@ -1,5 +1,5 @@
-const DoctorRegistration = artifacts.require("DoctorRegistration");
+const DoctorRegistry = artifacts.require("DoctorRegistration");
 
 module.exports = function(deployer) {
-  deployer.deploy(DoctorRegistration);
+  deployer.deploy(DoctorRegistry);
 };

@@ -1,0 +1,47 @@
+/* AboutUs.css */
+
+.hospital-image-container {
+    display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  }
+  
+  .hospital-image {
+    width: 100%;
+    max-width: 1000px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    
+  }
+  .landingP {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 500vh;
+    background-color: #121212; /* Dark background color */
+    color: #ffffff; /* Text color */
+  }
+
+  .about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .about-content h2 {
+    margin-top: 30px;
+  }
+  
+  .about-content h3 {
+    margin-top: 20px;
+  }
+  
+  .about-content p {
+    margin-top: 10px;
+  }
+  
+  .about-content button {
+    margin-top: 30px;
+  }
+  

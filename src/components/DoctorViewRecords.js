@@ -5,15 +5,15 @@ import NavBar_Logout from "./NavBar_Logout";
 import PatientRegistration from "../build/contracts/PatientRegistration.json";
 
 const DoctorViewPatient = () => {
-  const { phoneNumber } = useParams(); // Retrieve the phoneNumber from the URL parameter
+  const { hhNumber } = useParams(); // Retrieve the hhNumber from the URL parameter
   const navigate = useNavigate();
 
   const doctorForm = () => {
-    navigate("/doctor/"+phoneNumber+"/doctorform");
+    navigate("/doctor/"+hhNumber+"/doctorform");
   };
 
   const viewPatientRecords = () => {
-    navigate("/patient/"+phoneNumber+"/viewrecords");
+    navigate("/patient/"+hhNumber+"/viewrecords");
   };
 
   const [web3, setWeb3] = useState(null);
@@ -35,7 +35,7 @@ const DoctorViewPatient = () => {
         );
         setContract(contractInstance);
         try {
-          const result = await contractInstance.methods.getPatientDetails(phoneNumber).call();
+          const result = await contractInstance.methods.getPatientDetails(hhNumber).call();
           setPatientDetails(result);
         } catch (error) {
           console.error('Error retrieving patient details:', error);
@@ -48,7 +48,7 @@ const DoctorViewPatient = () => {
     };
 
     init();
-  }, [phoneNumber]);
+  }, [hhNumber]);
 
   const cancelOperation = () => {
     navigate(-1);
@@ -75,6 +75,7 @@ const DoctorViewPatient = () => {
             <span className="font-bold text-yellow-500">{patientDetails.bloodGroup}</span>{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
           Address : {" "}
             <span className="font-bold text-yellow-500">{patientDetails.homeAddress}</span>{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+            <br></br><br></br>
           Email-Id : {" "}
             <span className="font-bold text-yellow-500">{patientDetails.email}</span>
         </p>

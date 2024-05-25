@@ -8,7 +8,7 @@ import NavBar_Logout from "./NavBar_Logout";
 
 
 const ViewProfile = () => {
-  const { phoneNumber } = useParams(); // Retrieve the phoneNumber from the URL parameter
+  const { hhNumber } = useParams(); // Retrieve the hhNumber from the URL parameter
   const navigate = useNavigate();
   const [address, setAddress] = useState(null);
   const [web3, setWeb3] = useState(null);
@@ -35,7 +35,7 @@ const ViewProfile = () => {
 
         try {
           // Call the getPatientDetails function of the smart contract
-          const result = await contract.methods.getPatientDetails(phoneNumber).call();
+          const result = await contract.methods.getPatientDetails(hhNumber).call();
           setPatientDetails(result);
         } catch (error) {
           console.error('Error retrieving patient details:', error);
@@ -52,11 +52,11 @@ const ViewProfile = () => {
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
-      if (!contract || !phoneNumber) return;
+      if (!contract || !hhNumber) return;
 
       try {
         // Call the getPatientDetails function of the smart contract
-        const result = await contract.methods.getPatientDetails(phoneNumber).call();
+        const result = await contract.methods.getPatientDetails(hhNumber).call();
         setPatientDetails(result);
       } catch (error) {
         console.error('Error retrieving patient details:', error);
@@ -64,12 +64,12 @@ const ViewProfile = () => {
     };
 
     fetchPatientDetails();
-  }, [contract, phoneNumber]);
+  }, [contract, hhNumber]);
 
 
   const cancelOperation = async () => {
     try {
-    navigate("/patient/"+phoneNumber);
+    navigate("/patient/"+hhNumber);
     } catch (error) {
       console.error("Error checking permission:", error);
     }

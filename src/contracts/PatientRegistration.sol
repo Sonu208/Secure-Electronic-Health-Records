@@ -10,7 +10,7 @@ contract PatientRegistration {
         string bloodGroup;
         string homeAddress;
         string email;
-        string phoneNumber;
+        string hhNumber;
         string password;
     }
 
@@ -24,7 +24,7 @@ contract PatientRegistration {
     mapping(string => PatientList[]) private Dpermission;
     mapping(string => mapping(string => bool)) public doctorPermissions;
 
-    event PatientRegistered(string phoneNumber, string name, address walletAddress);
+    event PatientRegistered(string hhNumber, string name, address walletAddress);
 
     function registerPatient(
         address _walletAddress,
@@ -34,11 +34,11 @@ contract PatientRegistration {
         string memory _bloodGroup,
         string memory _homeAddress,
         string memory _email,
-        string memory _phoneNumber,
+        string memory _hhNumber,
         string memory _password
 
     ) external {
-        require(!isPatientRegistered[_phoneNumber], "Patient already registered");
+        require(!isPatientRegistered[_hhNumber], "Patient already registered");
 
         Patient memory newPatient = Patient({
             walletAddress: _walletAddress,
@@ -48,26 +48,26 @@ contract PatientRegistration {
             bloodGroup: _bloodGroup,
             homeAddress: _homeAddress,
             email: _email,    
-            phoneNumber: _phoneNumber,        
+            hhNumber: _hhNumber,        
             password: _password // Store password in the struct
         });
 
-        patients[_phoneNumber] = newPatient;
-        isPatientRegistered[_phoneNumber] = true;
-        emit PatientRegistered(_phoneNumber, _name, _walletAddress);
+        patients[_hhNumber] = newPatient;
+        isPatientRegistered[_hhNumber] = true;
+        emit PatientRegistered(_hhNumber, _name, _walletAddress);
     }
 
-    function isRegisteredPatient(string memory _phoneNumber) external view returns (bool) {
-        return isPatientRegistered[_phoneNumber];
+    function isRegisteredPatient(string memory _hhNumber) external view returns (bool) {
+        return isPatientRegistered[_hhNumber];
     }
     
     // Add a function to validate patient's password
-    function validatePassword(string memory _phoneNumber, string memory _password) external view returns (bool) {
-        require(isPatientRegistered[_phoneNumber], "Patient not registered");
-        return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(patients[_phoneNumber].password));
+    function validatePassword(string memory _hhNumber, string memory _password) external view returns (bool) {
+        require(isPatientRegistered[_hhNumber], "Patient not registered");
+        return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(patients[_hhNumber].password));
     }
 
-    function getPatientDetails(string memory _phoneNumber) external view returns (
+    function getPatientDetails(string memory _hhNumber) external view returns (
     address walletAddress,
     string memory name,
     string memory dateOfBirth,
@@ -76,8 +76,8 @@ contract PatientRegistration {
     string memory homeAddress,
     string memory email
     ) {
-        require(isPatientRegistered[_phoneNumber], "Patient not registered");
-        Patient memory patient = patients[_phoneNumber];
+        require(isPatientRegistered[_hhNumber], "Patient not registered");
+        Patient memory patient = patients[_hhNumber];
         return (patient.walletAddress, patient.name, patient.dateOfBirth, patient.gender, patient.bloodGroup, patient.homeAddress, patient.email);
     }
 

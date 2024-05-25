@@ -9,7 +9,7 @@ contract DoctorRegistration {
         string dateOfBirth;
         string gender;
         string email;
-        string phoneNumber;
+        string hhNumber;
         string specialization;
         string department;
         string designation;
@@ -27,7 +27,7 @@ contract DoctorRegistration {
     mapping(string => PatientList[]) private Dpermission;
     mapping(string => mapping(string => bool)) public doctorPermissions;
 
-    event DoctorRegistered(string phoneNumber, string doctorName, address walletAddress);
+    event DoctorRegistered(string hhNumber, string doctorName, address walletAddress);
 
     function registerDoctor(
         string memory _doctorName,
@@ -35,14 +35,14 @@ contract DoctorRegistration {
         string memory _dateOfBirth,
         string memory _gender,
         string memory _email,
-        string memory _phoneNumber,
+        string memory _hhNumber,
         string memory _specialization,
         string memory _department,
         string memory _designation,
         string memory _workExperience,
         string memory _password
     ) external {
-        require(doctorAddresses[_phoneNumber] == address(0), "Doctor already registered");
+        require(doctorAddresses[_hhNumber] == address(0), "Doctor already registered");
 
         Doctor memory newDoctor = Doctor({
             walletAddress: msg.sender,
@@ -51,7 +51,7 @@ contract DoctorRegistration {
             dateOfBirth: _dateOfBirth,
             gender: _gender,
             email: _email,
-            phoneNumber: _phoneNumber,
+            hhNumber: _hhNumber,
             specialization: _specialization,
             department: _department,
             designation: _designation,
@@ -59,16 +59,16 @@ contract DoctorRegistration {
             password: _password
         });
 
-        doctors[_phoneNumber] = newDoctor;
-        doctorAddresses[_phoneNumber] = msg.sender;
-        emit DoctorRegistered(_phoneNumber, _doctorName, msg.sender);
+        doctors[_hhNumber] = newDoctor;
+        doctorAddresses[_hhNumber] = msg.sender;
+        emit DoctorRegistered(_hhNumber, _doctorName, msg.sender);
     }
 
-    function isRegisteredDoctor(string memory _phoneNumber) external view returns (bool) {
-        return doctorAddresses[_phoneNumber] != address(0);
+    function isRegisteredDoctor(string memory _hhNumber) external view returns (bool) {
+        return doctorAddresses[_hhNumber] != address(0);
     }
 
-    function getDoctorDetails(string memory _phoneNumber) external view returns (
+    function getDoctorDetails(string memory _hhNumber) external view returns (
         address _walletAddress,
         string memory _doctorName,
         string memory _hospitalName,
@@ -80,8 +80,8 @@ contract DoctorRegistration {
         string memory _designation,
         string memory _workExperience
     ) {
-        require(doctorAddresses[_phoneNumber] != address(0), "Doctor not registered");
-        Doctor memory doctor = doctors[_phoneNumber];
+        require(doctorAddresses[_hhNumber] != address(0), "Doctor not registered");
+        Doctor memory doctor = doctors[_hhNumber];
         return (
             doctor.walletAddress,
             doctor.doctorName,
@@ -96,9 +96,9 @@ contract DoctorRegistration {
         );
     }
 
-    function validatePassword(string memory _phoneNumber, string memory _password) external view returns (bool) {
-        require(doctorAddresses[_phoneNumber] != address(0), "Doctor not registered");
-        return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(doctors[_phoneNumber].password));
+    function validatePassword(string memory _hhNumber, string memory _password) external view returns (bool) {
+        require(doctorAddresses[_hhNumber] != address(0), "Doctor not registered");
+        return keccak256(abi.encodePacked(_password)) == keccak256(abi.encodePacked(doctors[_hhNumber].password));
     }
 
     function grantPermission(

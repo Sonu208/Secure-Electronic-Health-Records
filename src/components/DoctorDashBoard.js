@@ -5,26 +5,19 @@ import NavBar_Logout from "./NavBar_Logout";
 import DoctorRegistration from "../build/contracts/DoctorRegistration.json";
 
 const DoctorDashBoardPage = () => {
-  const { phoneNumber } = useParams();
+  const { hhNumber } = useParams();
   const navigate = useNavigate();
   const [contract, setContract] = useState(null);
   const [doctorDetails, setDoctorDetails] = useState(null);
   const [error, setError] = useState(null);
 
-  // const doctorForm = () => {
-  //   navigate("/doctor/"+phoneNumber+"/doctorform");
-  // };
   
   const viewPatientList = () => {
-    navigate("/doctor/"+phoneNumber+"/patientlist");
+    navigate("/doctor/"+hhNumber+"/patientlist");
   };
 
-  // const viewPatientRecords = () => {
-  //   navigate("/doctor/"+phoneNumber+"/doctorviewpatient");
-  // };
-
   const viewDoctorProfile = () => {
-    navigate("/doctor/"+phoneNumber+"/viewdoctorprofile");
+    navigate("/doctor/"+hhNumber+"/viewdoctorprofile");
   };
 
   useEffect(() => {
@@ -42,7 +35,7 @@ const DoctorDashBoardPage = () => {
           setContract(contractInstance);
 
           // Call the getDoctorDetails function of the smart contract
-          const result = await contractInstance.methods.getDoctorDetails(phoneNumber).call();
+          const result = await contractInstance.methods.getDoctorDetails(hhNumber).call();
           setDoctorDetails(result);
         } catch (error) {
           console.error('Error initializing Web3 or fetching doctor details:', error);
@@ -55,7 +48,7 @@ const DoctorDashBoardPage = () => {
     };
 
     init();
-  }, [phoneNumber]);
+  }, [hhNumber]);
 
   return (
     <div>
@@ -75,24 +68,14 @@ const DoctorDashBoardPage = () => {
         >
           View Profile
         </button>
-        {/* <button
-          onClick={doctorForm}
-          className="px-6 py-3 bg-teal-500 hover:bg-gray-600 text-white rounded-lg focus:outline-none focus:ring focus:ring-teal-400 transition duration-300"
-        >
-          Prescription Consultancy
-        </button> */}
+        
         <button
         onClick={viewPatientList}
         className="px-6 py-3 bg-teal-500 hover-bg-gray-600 text-white rounded-lg focus:outline-none focus:ring focus:ring-teal-400 transition duration-300"
       >
         View Patient List
         </button>
-        {/* <button
-          onClick={viewPatientRecords}
-          className="px-6 py-3 bg-teal-500 hover-bg-gray-600 text-white rounded-lg focus:outline-none focus:ring focus:ring-teal-400 transition duration-300"
-        >
-          View Patient Records
-          </button> */}
+      
       </div>
       </div>
       </div>

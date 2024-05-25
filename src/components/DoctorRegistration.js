@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Web3 from "web3";
 import DoctorRegistration from "../build/contracts/DoctorRegistration.json";
 import { useNavigate } from "react-router-dom";
@@ -6,18 +6,20 @@ import "../CSS/DoctorRegistration.css";
 import NavBar from "./NavBar";
 
 const DoctorRegistry = () => {
+  const [web3, setWeb3] = useState(null);
+  const [contract, setContract] = useState(null);
   const [doctorAddress, setDoctorAddress] = useState("");
   const [doctorName, setDoctorName] = useState("");
   const [hospitalName, setHospitalName] = useState("");
   const [hospitalLocation, setHospitalLocation] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [hhNumber, sethhNumber] = useState("");
   const [specialization, setSpecialization] = useState("");
   const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
   const [workExperience, setWorkExperience] = useState("");
-  const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [hhNumberError, sethhNumberError] = useState("");
   const [specializationError, setSpecializationError] = useState("");
   const [departmentError, setDepartmentError] = useState("");
   const [designationError, setDesignationError] = useState("");
@@ -30,6 +32,33 @@ const DoctorRegistry = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const init = async () => {
+      if (window.ethereum) {
+        const web3Instance = new Web3(window.ethereum);
+        try {
+          await window.ethereum.enable();
+          setWeb3(web3Instance);
+
+          const networkId = await web3Instance.eth.net.getId();
+          const deployedNetwork = DoctorRegistration.networks[networkId];
+          const contractInstance = new web3Instance.eth.Contract(
+            DoctorRegistration.abi,
+            deployedNetwork && deployedNetwork.address
+          );
+
+          setContract(contractInstance);
+        } catch (error) {
+          console.error("User denied access to accounts.");
+        }
+      } else {
+        console.log("Please install MetaMask extension");
+      }
+    };
+
+    init();
+  }, []);
+
   const handleRegister = async () => {
     if (
       !doctorAddress ||
@@ -39,7 +68,7 @@ const DoctorRegistry = () => {
       !dateOfBirth ||
       !gender ||
       !email ||
-      !phoneNumber ||
+      !hhNumber ||
       !specialization ||
       !department ||
       !designation ||
@@ -53,9 +82,9 @@ const DoctorRegistry = () => {
       return;
     }
 
-    if (phoneNumber.length !== 10) {
+    if (hhNumber.length !== 6) {
       alert(
-        "You have entered a wrong phone number. Please enter a 10-digit phone number."
+        "You have entered a wrong HH Number. Please enter a 6-digit HH Number."
       );
       return;
     }
@@ -94,7 +123,7 @@ const DoctorRegistry = () => {
       );
 
       const isRegDoc = await contract.methods
-        .isRegisteredDoctor(phoneNumber)
+        .isRegisteredDoctor(hhNumber)
         .call();
 
       if (isRegDoc) {
@@ -109,7 +138,7 @@ const DoctorRegistry = () => {
           dateOfBirth,
           gender,
           email,
-          phoneNumber,
+          hhNumber,
           specialization,
           department,
           designation,
@@ -131,15 +160,15 @@ const DoctorRegistry = () => {
       setEmail(inputEmail);
     };
 
-    const handlePhoneNumberChange = (e) => {
-      const inputPhoneNumber = e.target.value;
-      const phoneRegex = /^\d{10}$/;
-      if (phoneRegex.test(inputPhoneNumber)) {
-        setPhoneNumber(inputPhoneNumber);
-        setPhoneNumberError("");
+    const handlehhNumberChange = (e) => {
+      const inputhhNumber = e.target.value;
+      const phoneRegex = /^\d{6}$/;
+      if (phoneRegex.test(inputhhNumber)) {
+        sethhNumber(inputhhNumber);
+        sethhNumberError("");
       } else {
-        setPhoneNumber(inputPhoneNumber);
-        setPhoneNumberError("Please enter a 10-digit phone number.");
+        sethhNumber(inputhhNumber);
+        sethhNumberError("Please enter a 6-digit HH Number.");
       }
   };
   
@@ -317,21 +346,21 @@ const DoctorRegistry = () => {
           </div>
             
           <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="phoneNumber">
-              Phone Number
+            <label className="block font-bold text-white" htmlFor="hhNumber">
+              HH Number
             </label>
             <input
-              id="phoneNumber"
-              name="phoneNumber"
+              id="hhNumber"
+              name="hhNumber"
               type="text"
               required
-              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${phoneNumberError && "border-red-500"}`}
-              placeholder="Enter your Phone Number"
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
+              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${hhNumberError && "border-red-500"}`}
+              placeholder="Enter your HH Number"
+              value={hhNumber}
+              onChange={handlehhNumberChange}
             />
-            {phoneNumberError && (
-              <p className="text-red-500 text-sm mt-1">{phoneNumberError}</p>
+            {hhNumberError && (
+              <p className="text-red-500 text-sm mt-1">{hhNumberError}</p>
             )}
           </div>
 
@@ -505,7 +534,7 @@ const DoctorRegistry = () => {
             onClick={handleRegister}
             className="py-3 px-4 bg-teal-500 text-white rounded-md font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
           >
-            Register Doctor
+            Register 
             </button>
             <button
               onClick={cancelOperation}

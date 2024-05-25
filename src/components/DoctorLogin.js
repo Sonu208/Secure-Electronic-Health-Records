@@ -7,21 +7,21 @@ import NavBar from "./NavBar";
 
 const DoctorLogin = () => {
   const navigate = useNavigate();
-  const [phoneNumberError, setPhoneNumberError] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [hhNumberError, sethhNumberError] = useState("");
+  const [hhNumber, sethhNumber] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
   const [doctorDetails, setDoctorDetails] = useState(null);
 
-  const handlePhoneNumberChange = (e) => {
-    const inputPhoneNumber = e.target.value;
-    const phoneRegex = /^\d{10}$/;
-    if (phoneRegex.test(inputPhoneNumber)) {
-      setPhoneNumber(inputPhoneNumber);
-      setPhoneNumberError("");
+  const handlehhNumberChange = (e) => {
+    const inputhhNumber = e.target.value;
+    const phoneRegex = /^\d{6}$/;
+    if (phoneRegex.test(inputhhNumber)) {
+      sethhNumber(inputhhNumber);
+      sethhNumberError("");
     } else {
-      setPhoneNumber(inputPhoneNumber);
-      setPhoneNumberError("Please enter a 10-digit phone number.");
+      sethhNumber(inputhhNumber);
+      sethhNumberError("Please enter a 6-digit HH Number.");
     }
   };
 
@@ -36,21 +36,21 @@ const DoctorLogin = () => {
       );
 
       const isRegisteredResult = await contract.methods
-        .isRegisteredDoctor(phoneNumber)
+        .isRegisteredDoctor(hhNumber)
         .call();
       setIsRegistered(isRegisteredResult);
 
       if (isRegisteredResult) {
         const isValidPassword = await contract.methods
-          .validatePassword(phoneNumber, password)
+          .validatePassword(hhNumber, password)
           .call();
 
         if (isValidPassword) {
           const doctor = await contract.methods
-            .getDoctorDetails(phoneNumber)
+            .getDoctorDetails(hhNumber)
             .call();
           setDoctorDetails(doctor);
-          navigate("/doctor/" + phoneNumber);
+          navigate("/doctor/" + hhNumber);
         } else {
           alert("Incorrect password");
         }
@@ -74,21 +74,21 @@ const DoctorLogin = () => {
         <div className="w-full max-w-4xl bg-gray-900 p-20 rounded-lg shadow-lg">
           <h2 className="text-3xl sm:text-4xl font-bold mb-6">Doctor Login</h2>
           <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="phoneNumber">
-              Phone Number
+            <label className="block font-bold text-white" htmlFor="hhNumber">
+              HH Number
             </label>
             <input
-              id="phoneNumber"
-              name="phoneNumber"
+              id="hhNumber"
+              name="hhNumber"
               type="text"
               required
-              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${phoneNumberError && "border-red-500"}`}
-              placeholder="Phone Number"
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
+              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${hhNumberError && "border-red-500"}`}
+              placeholder="HH Number"
+              value={hhNumber}
+              onChange={handlehhNumberChange}
             />
-            {phoneNumberError && (
-              <p className="text-red-500 text-sm mt-1">{phoneNumberError}</p>
+            {hhNumberError && (
+              <p className="text-red-500 text-sm mt-1">{hhNumberError}</p>
             )}
           </div>
 

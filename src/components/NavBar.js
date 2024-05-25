@@ -25,7 +25,7 @@ const NavBar = () => {
               className="text-2xl sm:text-3xl lg:text-4xl font-semibold cursor-pointer"
               onClick={() => navigate("/")}
             >
-              Secure Accessible Patient
+              Secure Electronic Health Records
             </span>
           </div>
 
@@ -36,6 +36,12 @@ const NavBar = () => {
               onClick={() => navigate("/")}
             >
               Home
+            </button>
+            <button
+              className="text-lg px-3 py-1.5 rounded-md font-medium transition-transform duration-300 ease-in-out transform hover:scale-110"
+              onClick={() => navigate("/AboutPage")}
+            >
+              About Us
             </button>
             <button
               className="text-lg px-3 py-1.5 rounded-md font-medium transition-transform duration-300 ease-in-out transform hover:scale-110"

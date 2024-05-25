@@ -12,8 +12,8 @@ const PatientRegistry = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [homeAddress, setHomeAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [hhNumber, sethhNumber] = useState("");
+  const [hhNumberError, sethhNumberError] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [gender, setGender] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +60,7 @@ const PatientRegistry = () => {
       !name ||
       !dateOfBirth ||
       !homeAddress ||
-      !phoneNumber ||
+      !hhNumber ||
       !gender ||
       !bg ||
       !email ||
@@ -74,9 +74,9 @@ const PatientRegistry = () => {
       return;
     }
 
-    if (phoneNumber.length !== 10) {
+    if (hhNumber.length !== 6) {
       alert(
-        "You have entered a wrong phone number. Please enter a 10-digit phone number."
+        "You have entered a wrong HH Number. Please enter a 6-digit HH Number."
       );
       return;
     }
@@ -129,7 +129,7 @@ const PatientRegistry = () => {
       );
 
       const isRegPatient = await contract.methods
-        .isRegisteredPatient(phoneNumber)
+        .isRegisteredPatient(hhNumber)
         .call();
 
       if (isRegPatient) {
@@ -146,7 +146,7 @@ const PatientRegistry = () => {
         bg,
         homeAddress,
         email,
-        phoneNumber,
+        hhNumber,
         password
       )
       .send({ from: walletAddress });
@@ -175,15 +175,15 @@ const PatientRegistry = () => {
     setConfirmPasswordError("");
   };
 
-  const handlePhoneNumberChange = (e) => {
-    const inputPhoneNumber = e.target.value;
-    const phoneRegex = /^\d{10}$/;
-    if (phoneRegex.test(inputPhoneNumber)) {
-      setPhoneNumber(inputPhoneNumber);
-      setPhoneNumberError("");
+  const handlehhNumberChange = (e) => {
+    const inputhhNumber = e.target.value;
+    const phoneRegex = /^\d{6}$/;
+    if (phoneRegex.test(inputhhNumber)) {
+      sethhNumber(inputhhNumber);
+      sethhNumberError("");
     } else {
-      setPhoneNumber(inputPhoneNumber);
-      setPhoneNumberError("Please enter a 10-digit phone number.");
+      sethhNumber(inputhhNumber);
+      sethhNumberError("Please enter a 6-digit HH Number.");
     }
   };
 
@@ -306,21 +306,21 @@ const PatientRegistry = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block font-bold text-white" htmlFor="phoneNumber">
-              Phone Number
+            <label className="block font-bold text-white" htmlFor="hhNumber">
+              HH Number
             </label>
             <input
-              id="phoneNumber"
-              name="phoneNumber"
+              id="hhNumber"
+              name="hhNumber"
               type="text"
               required
-              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${phoneNumberError && "border-red-500"}`}
+              className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${hhNumberError && "border-red-500"}`}
               placeholder="Enter your Mobile Number"
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
+              value={hhNumber}
+              onChange={handlehhNumberChange}
             />
-            {phoneNumberError && (
-              <p className="text-red-500 text-sm mt-1">{phoneNumberError}</p>
+            {hhNumberError && (
+              <p className="text-red-500 text-sm mt-1">{hhNumberError}</p>
             )}
           </div>
           

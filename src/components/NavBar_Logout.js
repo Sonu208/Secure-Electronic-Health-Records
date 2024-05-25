@@ -25,7 +25,7 @@ const NavBar_Logout = () => {
               className="text-2xl sm:text-3xl lg:text-4xl font-semibold cursor-pointer"
               onClick={() => navigate("/")}
             >
-              Secure Accessible Patient
+              Secure Electronic Health Records
             </span>
           </div>
 

@@ -1,46 +1,46 @@
 import React, { useState, useEffect } from "react";
-import DoctorRegistration from "../build/contracts/DoctorRegistration.json";
+import DiagnosticRegistration from "../build/contracts/DiagnosticRegistration.json";
 import Web3 from "web3";
 import { useNavigate, useParams } from "react-router-dom";
 import "../CSS/PatientWritePermission.css";
 import "../big_css/CreateEHR.css";
 import NavBar_Logout from "./NavBar_Logout";
 
-const ViewDoctorProfile = () => {
+const ViewDiagnosticProfile = () => {
   const { hhNumber } = useParams();
   const navigate = useNavigate();
-  const [doctorDetails, setDoctorDetails] = useState(null);
+  const [diagnosticDetails, setDiagnosticDetails] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchDoctorDetails = async () => {
+    const fetchDiagnosticDetails = async () => {
       try {
         if (window.ethereum) {
           const web3Instance = new Web3(window.ethereum);
           const networkId = await web3Instance.eth.net.getId();
-          const deployedNetwork = DoctorRegistration.networks[networkId];
+          const deployedNetwork = DiagnosticRegistration.networks[networkId];
           const contract = new web3Instance.eth.Contract(
-            DoctorRegistration.abi,
+            DiagnosticRegistration.abi,
             deployedNetwork && deployedNetwork.address
           );
 
-          const result = await contract.methods.getDoctorDetails(hhNumber).call();
-          setDoctorDetails(result);
+          const result = await contract.methods.getDiagnosticDetails(hhNumber).call();
+          setDiagnosticDetails(result);
         } else {
           setError("Please install MetaMask extension");
         }
       } catch (error) {
-        console.error('Error retrieving doctor details:', error);
-        setError('Error retrieving doctor details');
+        console.error('Error retrieving diagnostic details:', error);
+        setError('Error retrieving diagnostic details');
       }
     };
 
-    fetchDoctorDetails();
+    fetchDiagnosticDetails();
   }, [hhNumber]);
 
   const cancelOperation = async () => {
     try {
-      navigate("/doctor/" + hhNumber);
+      navigate("/diagnostic/" + hhNumber);
     } catch (error) {
       console.error("Error checking permission:", error);
     }
@@ -52,37 +52,22 @@ const ViewDoctorProfile = () => {
       <div className="bg-gradient-to-b from-black to-gray-800 p-4 sm:p-10 font-mono text-white flex flex-col justify-center items-center">
         <div className="h-full max-w-8xl bg-gray-700 p-24 rounded-lg shadow-lg flex flex-col justify-center items-center">
           <h1 className="text-3xl sm:text-4xl font-bold mb-6">
-            Doctor's Profile
+            Diagnostic's Profile
           </h1>
-          {doctorDetails && (
+          {diagnosticDetails && (
             <div>
               <center>
                 <p className="text-xl sm:text-2xl mb-2">
-                  Name : <span className="font-bold text-yellow-500">{doctorDetails[1]}</span>
+                  Diagnostic Center Name : <span className="font-bold text-yellow-500">{diagnosticDetails[1]}</span>
                 </p>
                 <p className="text-xl sm:text-2xl mb-2">
-                  DOB : <span className="font-bold text-yellow-500">{doctorDetails[3]}</span>
+                  Hospital Name : <span className="font-bold text-yellow-500">{diagnosticDetails[2]}</span>
                 </p>
                 <p className="text-xl sm:text-2xl mb-2">
-                  Gender : <span className="font-bold text-yellow-500">{doctorDetails[4]}</span>
+                  Location : <span className="font-bold text-yellow-500">{diagnosticDetails[3]}</span>
                 </p>
                 <p className="text-xl sm:text-2xl mb-2">
-                  Hospital Name : <span className="font-bold text-yellow-500">{doctorDetails[2]}</span>
-                </p>
-                <p className="text-xl sm:text-2xl mb-2">
-                  Specialization : <span className="font-bold text-yellow-500">{doctorDetails[6]}</span>
-                </p>
-                <p className="text-xl sm:text-2xl mb-2">
-                  Department : <span className="font-bold text-yellow-500">{doctorDetails[7]}</span>
-                </p>
-                <p className="text-xl sm:text-2xl mb-2">
-                  Designation : <span className="font-bold text-yellow-500">{doctorDetails[8]}</span>
-                </p>
-                <p className="text-xl sm:text-2xl mb-2">
-                  Work Experience : <span className="font-bold text-yellow-500">{doctorDetails[9]}</span>
-                </p>
-                <p className="text-xl sm:text-2xl mb-2">
-                  Email-Id : <span className="font-bold text-yellow-500">{doctorDetails[5]}</span>
+                  Email-Id : <span className="font-bold text-yellow-500">{diagnosticDetails[4]}</span>
                 </p>
                 <p className="text-xl sm:text-2xl mb-2">
                   HH Number : <span className="font-bold text-yellow-500">{hhNumber}</span>
@@ -104,4 +89,4 @@ const ViewDoctorProfile = () => {
   );
 };
 
-export default ViewDoctorProfile;
+export default ViewDiagnosticProfile;
