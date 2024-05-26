@@ -1,15 +1,15 @@
-The "Secure Electronic Health Records" project utilizes Ethereum blockchain, Metamask, and Ganache to enable patients to securely upload medical data and also view his data, manage doctor access, and view data history. Doctors can manage patient lists, access records, generate consultancy reports, and revoke access given by patient. Diagnostic centers can create EHR reports, ensuring visibility for both patients and doctors through IPFS integration. This decentralized approach enhances data security, interoperability, and patient control over health information, ultimately improving healthcare delivery and patient outcomes.
+Summary : The "Secure Electronic Health Records" project utilizes Ethereum blockchain, Metamask, and Ganache to enable patients to securely upload medical data and also view his data, manage doctor access, and view data history. Doctors can manage patient lists, access records, generate consultancy reports, and revoke access given by patient. Diagnostic centers can create EHR reports, ensuring visibility for both patients and doctors through IPFS integration. This decentralized approach enhances data security, interoperability, and patient control over health information, ultimately improving healthcare delivery and patient outcomes.
 
 Technology Used :
 
-Blockchain Technology: Ethereum
-Blockchain Development Tools: Metamask, Ganache
-Decentralized File Storage: IPFS (InterPlanetary File System)
-Smart Contract Development: Solidity
-Frontend Development: ReactJS
-Testing Frameworks: Truffle (for testing Solidity contracts)
-Version Control: Git
-Development Environment: Node.js
+Blockchain Technology: Ethereum<br>
+Blockchain Development Tools: Metamask, Ganache<br>
+Decentralized File Storage: IPFS (InterPlanetary File System)<br>
+Smart Contract Development: Solidity<br>
+Frontend Development: ReactJS<br>
+Testing Frameworks: Truffle (for testing Solidity contracts)<br>
+Version Control: Git<br>
+Development Environment: Node.js<br>
 
 Screenshots : 
 
@@ -57,8 +57,75 @@ Doctor Side :
 <img width="1363" alt="Screenshot 2024-05-26 at 10 28 16 PM" src="https://github.com/Sonu208/Secure-Electronic-Health-Records/assets/99793746/e328184c-f7b8-422e-9945-58820179cc7b">
 <br><br>
 <img width="671" alt="Screenshot 2024-05-26 at 10 29 31 PM" src="https://github.com/Sonu208/Secure-Electronic-Health-Records/assets/99793746/1572acf6-fd11-4044-9075-f8604de5657a">
+<br><br>
+<br><br>
+Diagnostic Side :
+<br>
+<img width="808" alt="Screenshot 2024-05-26 at 10 48 42 PM" src="https://github.com/Sonu208/Secure-Electronic-Health-Records/assets/99793746/f66e9981-6b98-483c-bf25-560bc13f5fc0">
+
+<br>
+
+<img width="761" alt="Screenshot 2024-05-26 at 10 43 57 PM" src="https://github.com/Sonu208/Secure-Electronic-Health-Records/assets/99793746/f51db8b9-95d9-418e-ba42-f38e397de263">
+
+<br><br>
+Report has been reflected in record viewer so that both patient and doctor can see : 
+<br>
+<br>
+
+<img width="1395" alt="Screenshot 2024-05-26 at 10 44 59 PM" src="https://github.com/Sonu208/Secure-Electronic-Health-Records/assets/99793746/b5549f81-7dd3-4e2c-8514-b44ed045fec2">
+<br><br>
+<img width="841" alt="Screenshot 2024-05-26 at 10 45 15 PM" src="https://github.com/Sonu208/Secure-Electronic-Health-Records/assets/99793746/c3b6c074-1fc2-4f92-a2ec-f4a3b6b0d4b2">
+
+## For Full working project 
 
 
+contact : 
+[Mail](mailto:sonupradhan208@gmail.com?Subject=ehr-blockchain&Body=Hi,)
+`sonupradhan208@gmail.com`
 
+🆁🅴🆀🆄🅸🆁🅴🅼🅴🅽🆃🆂
 
+1.Install nodeJs
 
+* [Node JS](https://nodejs.org/en/download/)
+
+2.Install Ganache
+
+* [Ganache Truffle](https://www.trufflesuite.com/ganache)
+
+3. Download IPFS (kubo)
+
+* [IPFS Kubo](https://dist.ipfs.tech/#go-ipfs)
+
+4.Add Metamask Extension in Browser
+
+* [Metamask Chrome](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en-US)
+
+5. open cmd in project directory
+
+```
+npm install --force
+```
+
+5.open cmd/terminal as Administrator and type
+
+```
+npm install -g truffle
+```
+
+6.open Ganache
+ 
+ *  New Workspace
+ *  AddProject
+ *  Select truffle-config.js in Project Directory
+ *  Save Workspace
+
+7.Compile and migrate Contracts
+ ```
+ truffle migrate
+ ```
+8. Run Server
+
+```
+npm start
+```
