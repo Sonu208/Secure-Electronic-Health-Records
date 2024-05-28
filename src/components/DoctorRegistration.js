@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Web3 from "web3";
 import DoctorRegistration from "../build/contracts/DoctorRegistration.json";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,6 @@ import "../CSS/DoctorRegistration.css";
 import NavBar from "./NavBar";
 
 const DoctorRegistry = () => {
-  const [web3, setWeb3] = useState(null);
-  const [contract, setContract] = useState(null);
   const [doctorAddress, setDoctorAddress] = useState("");
   const [doctorName, setDoctorName] = useState("");
   const [hospitalName, setHospitalName] = useState("");
@@ -31,33 +29,6 @@ const DoctorRegistry = () => {
   const [emailError, setEmailError] = useState("");
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const init = async () => {
-      if (window.ethereum) {
-        const web3Instance = new Web3(window.ethereum);
-        try {
-          await window.ethereum.enable();
-          setWeb3(web3Instance);
-
-          const networkId = await web3Instance.eth.net.getId();
-          const deployedNetwork = DoctorRegistration.networks[networkId];
-          const contractInstance = new web3Instance.eth.Contract(
-            DoctorRegistration.abi,
-            deployedNetwork && deployedNetwork.address
-          );
-
-          setContract(contractInstance);
-        } catch (error) {
-          console.error("User denied access to accounts.");
-        }
-      } else {
-        console.log("Please install MetaMask extension");
-      }
-    };
-
-    init();
-  }, []);
 
   const handleRegister = async () => {
     if (
@@ -84,7 +55,7 @@ const DoctorRegistry = () => {
 
     if (hhNumber.length !== 6) {
       alert(
-        "You have entered a wrong HH Number. Please enter a 6-digit HH Number."
+        "You have entered a wrong hh number. Please enter a 6-digit hh number."
       );
       return;
     }
@@ -168,7 +139,7 @@ const DoctorRegistry = () => {
         sethhNumberError("");
       } else {
         sethhNumber(inputhhNumber);
-        sethhNumberError("Please enter a 6-digit HH Number.");
+        sethhNumberError("Please enter a 6-digit hh number.");
       }
   };
   
@@ -355,7 +326,7 @@ const DoctorRegistry = () => {
               type="text"
               required
               className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${hhNumberError && "border-red-500"}`}
-              placeholder="Enter your HH Number"
+              placeholder="Enter your Phone Number"
               value={hhNumber}
               onChange={handlehhNumberChange}
             />
@@ -534,7 +505,7 @@ const DoctorRegistry = () => {
             onClick={handleRegister}
             className="py-3 px-4 bg-teal-500 text-white rounded-md font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
           >
-            Register 
+            Register Doctor
             </button>
             <button
               onClick={cancelOperation}
