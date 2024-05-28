@@ -67,7 +67,8 @@ const PatientRegistry = () => {
       !walletAddress ||
       !password ||
       !confirmPassword
-    ) {
+    )
+     {
       alert(
         "You have missing input fields. Please fill in all the required fields."
       );
@@ -197,7 +198,7 @@ const PatientRegistry = () => {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-black to-gray-800 font-mono">
       <div className="w-full max-w-4xl">
         <h2 className="text-3xl text-white mb-6 font-bold text-center">
-          Register Patient
+         Patient Registration
         </h2>
         <form className="bg-gray-900 p-6 rounded-lg shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
@@ -315,7 +316,7 @@ const PatientRegistry = () => {
               type="text"
               required
               className={`mt-2 p-2 w-full text-white bg-gray-700 border border-gray-600 rounded-md hover-bg-gray-800 transition duration-200 ${hhNumberError && "border-red-500"}`}
-              placeholder="Enter your Mobile Number"
+              placeholder="Enter your HH Number"
               value={hhNumber}
               onChange={handlehhNumberChange}
             />
