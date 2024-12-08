@@ -124,6 +124,7 @@ npm install -g truffle
 
 7.Compile and migrate Contracts
  ```
+ truffle compile
  truffle migrate
  ```
 8. Run Server
